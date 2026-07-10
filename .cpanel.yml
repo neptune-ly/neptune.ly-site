@@ -1,0 +1,5 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/neptunel/public_html
+    - /bin/cp -R index.html products.html solutions.html open-source.html about.html contact.html privacy.html 404.html robots.txt sitemap.xml site.webmanifest .htaccess products assets api $DEPLOYPATH

@@ -1,0 +1,59 @@
+# ── Neptune.ly — Apache/LiteSpeed hardening ─────────────────────────────────
+
+# Force HTTPS + canonical host
+RewriteEngine On
+RewriteCond %{HTTPS} !=on
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+RewriteRule ^ https://%1%{REQUEST_URI} [L,R=301]
+
+# Custom error page
+ErrorDocument 404 /404.html
+
+# No directory listings, no server signature
+Options -Indexes
+ServerSignature Off
+
+# Block dot-files and repo/tooling paths if they ever reach the server
+RewriteRule (^|/)\.(?!well-known) - [F]
+RewriteRule ^(brand|tools|\.github)(/|$) - [F]
+<FilesMatch "(?i)\.(md|py|yml|yaml|json|lock|log|sh|bak)$">
+  Require all denied
+</FilesMatch>
+<FilesMatch "^(site\.webmanifest|manifest\.json)$">
+  Require all granted
+</FilesMatch>
+
+# Security headers
+<IfModule mod_headers.c>
+  Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set X-Frame-Options "DENY"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=(), usb=()"
+  Header always set Cross-Origin-Opener-Policy "same-origin"
+  Header always set Cross-Origin-Resource-Policy "same-origin"
+  Header always set Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"
+  Header unset X-Powered-By
+</IfModule>
+
+# Sane caching: hashed-free assets get a week, HTML always revalidates
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType text/html "access plus 0 seconds"
+  ExpiresByType text/css "access plus 7 days"
+  ExpiresByType application/javascript "access plus 7 days"
+  ExpiresByType image/svg+xml "access plus 30 days"
+  ExpiresByType image/png "access plus 30 days"
+  ExpiresByType font/woff2 "access plus 365 days"
+</IfModule>
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css application/javascript image/svg+xml application/json
+</IfModule>
+AddType font/woff2 .woff2
+
+# PHP hardening for the contact endpoint (ignored where PHP ini not allowed)
+<IfModule mod_php.c>
+  php_flag display_errors Off
+  php_flag expose_php Off
+</IfModule>
