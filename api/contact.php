@@ -12,7 +12,7 @@ header('X-Content-Type-Options: nosniff');
 header('Cache-Control: no-store');
 
 const MAIL_TO   = 'info@neptune.ly';
-const MAIL_FROM = 'website@neptune.ly';
+const MAIL_FROM = 'noreply@neptune.ly'; // existing mailbox — real bounce path + SPF-aligned
 const RATE_MAX  = 5;        // submissions
 const RATE_WIN  = 3600;     // per hour per IP
 const MIN_MS    = 3000;     // human time-trap
