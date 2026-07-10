@@ -1,0 +1,4 @@
+Contact: mailto:info@neptune.ly
+Expires: 2027-12-31T23:59:59.000Z
+Preferred-Languages: en, ar
+Canonical: https://neptune.ly/.well-known/security.txt
