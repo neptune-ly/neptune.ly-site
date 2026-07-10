@@ -53,6 +53,8 @@ RewriteRule ^(brand|tools|\.github)(/|$) - [F]
   AddOutputFilterByType DEFLATE text/html text/css application/javascript image/svg+xml application/json
 </IfModule>
 AddType font/woff2 .woff2
+AddType application/manifest+json .webmanifest
+AddType image/x-icon .ico
 
 # PHP hardening for the contact endpoint (ignored where PHP ini not allowed)
 <IfModule mod_php.c>
