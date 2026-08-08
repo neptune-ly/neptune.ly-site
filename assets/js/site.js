@@ -106,6 +106,26 @@
   /* ---------- contact / quote form ---------- */
   var form = document.getElementById("contact-form");
   if (form) {
+    // Preserve campaign attribution without introducing a third-party tracker.
+    // First-touch values persist for the session; current URL values win when
+    // a visitor arrives from a later campaign touch.
+    var attributionKeys = ["utm_source", "utm_medium", "utm_campaign", "utm_content"];
+    var query = new URLSearchParams(window.location.search);
+    attributionKeys.forEach(function (key) {
+      var field = form.querySelector('[name="' + key + '"]');
+      if (!field) return;
+      var current = query.get(key);
+      var stored = null;
+      try { stored = window.sessionStorage.getItem("neptune_" + key); } catch (_) {}
+      if (current) {
+        field.value = current;
+        try { window.sessionStorage.setItem("neptune_" + key, current); } catch (_) {}
+      } else if (stored) {
+        field.value = stored;
+      }
+    });
+    var landingField = form.querySelector('[name="landing_path"]');
+    if (landingField) landingField.value = window.location.pathname;
     var started = Date.now();
     form.addEventListener("submit", function (e) {
       e.preventDefault();
