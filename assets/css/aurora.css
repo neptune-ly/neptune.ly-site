@@ -1,0 +1,946 @@
+/* ============================================================================
+   Neptune.ly — "Deep Field" premium motion layer
+   Loads AFTER odyssey.css. Consumes Odyssey tokens only — no new brand colours,
+   no external dependencies, no inline script (CSP: script-src 'self').
+   Light + dark · LTR + RTL · reduced-motion safe · mobile-guarded.
+   ========================================================================== */
+
+/* ---------------------------------------------------------------------------
+   0 · motion tokens for this layer
+   ------------------------------------------------------------------------ */
+:root{
+  --npt-deep-0:#041B33;
+  --npt-deep-1:#052546;
+  --npt-deep-2:#07315F;
+  --npt-deep-3:#0A4178;
+
+  /* ambient field — orb blur scales with the viewport, per the .wel__orb
+     blur:size ratio (44px on a 220px orb = 20%), clamped for very large screens */
+  --npt-orb-blur:clamp(46px,6.4vmax,116px);
+  --npt-grain-opacity:.028;
+
+  /* glass surfaces */
+  --npt-card-alpha:95%;
+  --npt-card-blur:14px;
+
+  --npt-ease-out-quint:cubic-bezier(.22,1,.36,1);
+  --npt-dur-reveal:900ms;
+}
+
+[data-mode="dark"]{
+  --npt-grain-opacity:.05;
+  --npt-card-alpha:90%;
+}
+
+/* Doctrine §3.4: dark mode is a GLOW, not a cast shadow — lerp the shadow
+   colour toward primary, drop the directional offset, widen the blur. */
+[data-mode="dark"]{
+  --npt-shadow-key:0 0 52px color-mix(in oklab,var(--md-sys-color-primary) 35%,transparent);
+  --npt-shadow-soft:0 0 34px color-mix(in oklab,var(--md-sys-color-primary) 26%,transparent);
+}
+
+/* The ambient field lives behind the page, so the page itself must let it
+   through. html keeps the solid base colour; body becomes the glass. */
+html{background:var(--md-sys-color-background)}
+body{background:transparent}
+
+
+/* ---------------------------------------------------------------------------
+   1 · ambient field — the Welcome-orb recipe taken to page scale
+
+   Extracted from neptune_odyssey `site/templates.html` (.wel__bg / .wel__orb),
+   per ODYSSEY_RULEBOOK.md §3.6: "primary/tertiary/secondary blobs drifting on
+   15/19/17s loops over a radial wash (primary 26% -> surface at 68%)".
+
+   The loop durations, easing, opacity (.5) and scale factors (1.16/1.1/1.22)
+   are the doctrine's, unchanged. Only the box sizes and travel distances are
+   restated from px to vmax, each at the source's own travel:size ratio, so the
+   same motion reads at viewport scale instead of phone scale.
+   ------------------------------------------------------------------------ */
+.npt-field{
+  position:fixed;inset:0;z-index:-2;pointer-events:none;overflow:hidden;
+  contain:strict;
+  /* .wel__bg, verbatim */
+  background:radial-gradient(135% 95% at 50% -5%,
+    color-mix(in oklab,var(--md-sys-color-primary) 26%,var(--md-sys-color-surface)) 0%,
+    var(--md-sys-color-surface) 68%);
+}
+.npt-field b{
+  position:absolute;display:block;border-radius:50%;
+  filter:blur(var(--npt-orb-blur));
+  opacity:.5;
+  will-change:transform;
+}
+
+/* orb 1 — primary · 220px -> 46vmax · travel 28/38px = .127/.173 of box */
+.npt-field b:nth-child(1){
+  inline-size:46vmax;block-size:46vmax;
+  inset-block-start:-9vmax;inset-inline-start:-7.5vmax;
+  background:var(--md-sys-color-primary);
+  animation:npt-orb-1 15s ease-in-out infinite;
+}
+/* orb 2 — tertiary · 184px -> 38vmax · travel -38/26px = -.207/.141 of box */
+.npt-field b:nth-child(2){
+  inline-size:38vmax;block-size:38vmax;
+  inset-block-start:31%;inset-inline-end:-9.5vmax;
+  background:var(--md-sys-color-tertiary);
+  animation:npt-orb-2 19s ease-in-out infinite;
+}
+/* orb 3 — secondary · 160px -> 33vmax · travel 26/-30px = .163/-.188 of box */
+.npt-field b:nth-child(3){
+  inline-size:33vmax;block-size:33vmax;
+  inset-block-end:-6vmax;inset-inline-start:5vmax;
+  background:var(--md-sys-color-secondary);
+  animation:npt-orb-3 17s ease-in-out infinite;
+}
+
+@keyframes npt-orb-1{
+  0%,100%{transform:translate(0,0) scale(1)}
+  50%{transform:translate(5.9vmax,8vmax) scale(1.16)}
+}
+@keyframes npt-orb-2{
+  0%,100%{transform:translate(0,0) scale(1)}
+  50%{transform:translate(-7.9vmax,5.4vmax) scale(1.1)}
+}
+@keyframes npt-orb-3{
+  0%,100%{transform:translate(0,0) scale(1)}
+  50%{transform:translate(5.4vmax,-6.2vmax) scale(1.22)}
+}
+
+/* Page-level motif wash. Doctrine §3.3 puts the signature motif over heroes at
+   strength x1, cards x0.65-0.8 and page washes x0.055 — this is the page wash,
+   using --npt-motif so a re-themed brandprint changes it automatically. */
+.npt-field::after{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  color:var(--md-sys-color-on-surface);
+  background:var(--npt-motif);
+  background-size:var(--npt-motif-size,auto);
+  opacity:.055;
+}
+
+/* Fine film grain over the whole field — kills gradient banding on wide gamut
+   displays and is the single cheapest "expensive" cue there is. */
+.npt-grain{
+  position:fixed;inset:0;z-index:-1;pointer-events:none;
+  opacity:var(--npt-grain-opacity);
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Sections must be translucent or the field never shows through. */
+.section--tint{
+  background:color-mix(in oklab,var(--md-sys-color-surface-container-low) 78%,transparent);
+  -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
+}
+
+
+/* ---------------------------------------------------------------------------
+   2 · constellation canvas — the "integration fabric" motif
+   One shared RAF loop in aurora.js paints every .npt-web that is on screen.
+   Sits inside dark surfaces only, where white nodes read cleanly.
+   ------------------------------------------------------------------------ */
+.npt-web{
+  position:absolute;inset:0;inline-size:100%;block-size:100%;
+  pointer-events:none;z-index:1;display:block;
+  opacity:0;transition:opacity 1.2s var(--npt-ease-standard);
+}
+.npt-web.lit{opacity:1}
+.hero__inner,.navy-panel > *{position:relative;z-index:3}
+
+
+/* ---------------------------------------------------------------------------
+   3 · scroll progress rail
+   ------------------------------------------------------------------------ */
+.npt-progress{
+  position:fixed;inset-block-start:0;inset-inline:0;block-size:3px;z-index:120;
+  pointer-events:none;background:transparent;
+}
+.npt-progress i{
+  display:block;block-size:100%;inline-size:100%;
+  transform:scaleX(0);transform-origin:left center;
+  background:linear-gradient(90deg,var(--npt-brand-navy),var(--npt-brand-sky) 42%,var(--npt-brand-coral));
+  box-shadow:0 0 14px color-mix(in oklab,var(--npt-brand-sky) 60%,transparent);
+}
+[dir="rtl"] .npt-progress i{transform-origin:right center}
+
+
+/* ---------------------------------------------------------------------------
+   4 · header — deeper glass, animated hairline
+   ------------------------------------------------------------------------ */
+.site-header{
+  background:color-mix(in oklab,var(--md-sys-color-surface) 68%,transparent);
+  -webkit-backdrop-filter:blur(22px) saturate(1.7);
+  backdrop-filter:blur(22px) saturate(1.7);
+}
+.site-header::after{
+  content:"";position:absolute;inset-block-end:0;inset-inline:0;block-size:1px;
+  background:linear-gradient(90deg,transparent,
+    color-mix(in oklab,var(--npt-brand-sky) 55%,transparent) 30%,
+    color-mix(in oklab,var(--npt-brand-coral) 55%,transparent) 70%,transparent);
+  opacity:0;transition:opacity var(--npt-dur-standard) var(--npt-ease-standard);
+}
+.site-header.scrolled::after{opacity:.9}
+.nav__links a{position:relative}
+.nav__links a::after{
+  content:"";position:absolute;inset-block-end:3px;inset-inline-start:50%;
+  inline-size:0;block-size:2px;border-radius:2px;background:var(--npt-brand-coral);
+  transform:translateX(-50%);
+  transition:inline-size var(--npt-dur-fast) var(--npt-ease-spring);
+}
+[dir="rtl"] .nav__links a::after{transform:translateX(50%)}
+.nav__links a:hover::after{inline-size:18px}
+.nav__links a[aria-current="page"]::after{inline-size:0}
+
+
+/* ---------------------------------------------------------------------------
+   5 · hero — kinetic type, orbit ring, depth
+   ------------------------------------------------------------------------ */
+.hero{
+  background:
+    radial-gradient(120% 90% at 78% 8%,color-mix(in oklab,var(--npt-deep-3) 92%,var(--npt-brand-sky)) 0%,transparent 58%),
+    linear-gradient(148deg,var(--npt-deep-0) 0%,var(--npt-deep-2) 44%,var(--npt-deep-3) 100%);
+}
+/* soften the hard cut into the page below */
+.hero::before{opacity:.42}
+.hero__inner{padding-block:clamp(96px,13vw,168px)}
+
+/* word-by-word rise for the headline — set up by aurora.js, which wraps each
+   word in .w > i. Falls back to plain text if JS never runs. */
+.kinetic .w{display:inline-block;overflow:hidden;vertical-align:bottom;padding-block-end:.06em}
+.kinetic .w > i{
+  display:inline-block;font-style:inherit;
+  transform:translateY(112%) rotate(3deg);opacity:0;
+  transition:transform 1s var(--npt-ease-out-quint),opacity .8s var(--npt-ease-standard);
+  transition-delay:var(--d,0ms);
+}
+.kinetic.in .w > i{transform:none;opacity:1}
+
+/* Fix (pre-existing): odyssey.css's `.stat span{font-size:13.5px}` also matches
+   the counter span nested inside `.stat b`, so the hero figures rendered at
+   13.5px instead of the 36.8px the `b` asks for. Re-inherit inside the b. */
+.stat b span{font-size:inherit;line-height:inherit;font-weight:inherit;color:inherit}
+.stat b .plus{color:var(--npt-brand-coral)}
+
+/* Word-splitting turns every word into an atomic inline, and atomic inlines
+   create soft-wrap opportunities around themselves — which let the trailing
+   coral full stop break onto a line of its own at narrow widths. Suppressing
+   wrapping across the group glues the accent word to its stop. */
+.nowrap-unit{white-space:nowrap}
+
+/* The accent word carries a live gradient instead of flat coral. Warm stops
+   only — sweeping through sky desaturated the glyphs to grey at the midpoint,
+   which read as disabled text rather than as an accent. */
+.grad-word{
+  background:linear-gradient(96deg,var(--npt-brand-coral),var(--npt-brand-beige) 30%,var(--npt-brand-coral) 60%,var(--npt-brand-coral));
+  background-size:300% 100%;
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;color:transparent;
+  animation:npt-grad-pan 9s linear infinite;
+}
+@keyframes npt-grad-pan{to{background-position:300% 0}}
+
+/* eyebrow gets a live status dot instead of a static one */
+.hero .eyebrow::before{
+  background:var(--npt-brand-coral);
+  box-shadow:0 0 0 0 color-mix(in oklab,var(--npt-brand-coral) 70%,transparent);
+  animation:npt-pulse 2.6s var(--npt-ease-standard) infinite;
+}
+@keyframes npt-pulse{
+  0%{box-shadow:0 0 0 0 color-mix(in oklab,var(--npt-brand-coral) 62%,transparent)}
+  70%{box-shadow:0 0 0 11px transparent}
+  100%{box-shadow:0 0 0 0 transparent}
+}
+
+/* stat chips — glass, tabular, with a hairline sweep on hover */
+.hero .stats{gap:16px}
+.hero .stat{
+  position:relative;overflow:hidden;
+  background:color-mix(in oklab,#fff 7%,transparent);
+  border-color:color-mix(in oklab,#fff 18%,transparent);
+  transition:transform var(--npt-dur-standard) var(--npt-ease-spring),
+             background var(--npt-dur-standard) var(--npt-ease-standard),
+             border-color var(--npt-dur-standard) var(--npt-ease-standard);
+}
+.hero .stat::after{
+  content:"";position:absolute;inset-block-start:0;inset-inline:0;block-size:1px;
+  background:linear-gradient(90deg,transparent,color-mix(in oklab,var(--npt-brand-sky) 90%,transparent),transparent);
+  opacity:.55;
+}
+.hero .stat:hover{
+  transform:translateY(-4px);
+  background:color-mix(in oklab,#fff 12%,transparent);
+  border-color:color-mix(in oklab,var(--npt-brand-sky) 42%,transparent);
+}
+
+/* the trust line becomes a live ticker rail */
+.hero__foot{
+  gap:14px;padding-block-start:8px;
+  border-block-start:1px solid color-mix(in oklab,#fff 12%,transparent);
+}
+
+
+/* ---------------------------------------------------------------------------
+   6 · cards — cursor spotlight, gradient edge, optional tilt
+   Custom props --mx/--my are written by aurora.js in % of the card box.
+   ------------------------------------------------------------------------ */
+.card{
+  background:color-mix(in oklab,var(--md-sys-color-surface-container-lowest) var(--npt-card-alpha),transparent);
+  isolation:isolate;
+  transition:transform var(--npt-dur-standard) var(--npt-ease-spring),
+             box-shadow var(--npt-dur-standard) var(--npt-ease-standard),
+             border-color var(--npt-dur-standard) var(--npt-ease-standard);
+}
+@media (min-width:900px){
+  .card{-webkit-backdrop-filter:blur(var(--npt-card-blur));backdrop-filter:blur(var(--npt-card-blur))}
+}
+[data-mode="dark"] .card{
+  background:color-mix(in oklab,var(--md-sys-color-surface-container-low) var(--npt-card-alpha),transparent);
+}
+
+/* spotlight — a soft brand-tinted glow that tracks the pointer */
+.card::before{
+  content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+  border-radius:inherit;opacity:0;
+  background:radial-gradient(340px circle at var(--mx,50%) var(--my,50%),
+    color-mix(in oklab,var(--npt-brand-sky) 20%,transparent),transparent 62%);
+  transition:opacity var(--npt-dur-standard) var(--npt-ease-standard);
+}
+.card:hover::before{opacity:1}
+[data-mode="dark"] .card::before{
+  background:radial-gradient(340px circle at var(--mx,50%) var(--my,50%),
+    color-mix(in oklab,var(--npt-brand-sky) 26%,transparent),transparent 62%);
+}
+
+/* lit edge — a 1px gradient border revealed on hover, drawn with a mask so it
+   never bleeds into the card's own background */
+.card::after{
+  content:"";position:absolute;inset:0;pointer-events:none;border-radius:inherit;
+  padding:1px;opacity:0;
+  background:linear-gradient(140deg,
+    color-mix(in oklab,var(--npt-brand-sky) 85%,transparent),
+    color-mix(in oklab,var(--npt-brand-coral) 78%,transparent) 52%,
+    transparent 78%);
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude;
+  transition:opacity var(--npt-dur-standard) var(--npt-ease-standard);
+}
+.card:hover::after{opacity:1}
+
+a.card:hover{transform:translateY(-6px) scale(1.012)}
+.pmark{transition:transform var(--npt-dur-standard) var(--npt-ease-spring),box-shadow var(--npt-dur-standard) var(--npt-ease-standard)}
+a.card:hover .pmark{transform:translateY(-2px) rotate(-4deg) scale(1.06)}
+[dir="rtl"] a.card:hover .pmark{transform:translateY(-2px) rotate(4deg) scale(1.06)}
+
+
+/* ---------------------------------------------------------------------------
+   7 · magnetic buttons
+   --tx/--ty written by aurora.js; the transition handles the snap-back.
+   ------------------------------------------------------------------------ */
+.btn{transform:translate3d(var(--tx,0),var(--ty,0),0)}
+.btn:hover{transform:translate3d(var(--tx,0),calc(var(--ty,0px) - 2px),0)}
+.btn:active{transform:translate3d(var(--tx,0),var(--ty,0),0) scale(.985)}
+.btn--onnavy{
+  box-shadow:0 10px 30px -12px color-mix(in oklab,var(--npt-brand-sky) 70%,transparent);
+}
+.btn--onnavy:hover{
+  box-shadow:0 16px 40px -12px color-mix(in oklab,var(--npt-brand-sky) 85%,transparent);
+}
+
+
+/* ---------------------------------------------------------------------------
+   8 · client marquee — infinite, direction-aware, pauses on hover
+   ------------------------------------------------------------------------ */
+.marquee{
+  position:relative;overflow:hidden;
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 9%,#000 91%,transparent);
+  mask-image:linear-gradient(90deg,transparent,#000 9%,#000 91%,transparent);
+}
+.marquee__track{
+  display:flex;inline-size:max-content;gap:0;
+  animation:npt-marquee 38s linear infinite;
+  will-change:transform;
+}
+[dir="rtl"] .marquee__track{animation-name:npt-marquee-rtl}
+.marquee:hover .marquee__track,.marquee:focus-within .marquee__track{animation-play-state:paused}
+@keyframes npt-marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@keyframes npt-marquee-rtl{from{transform:translateX(0)}to{transform:translateX(50%)}}
+.marquee__item{
+  display:inline-flex;align-items:center;gap:12px;padding-inline:30px;
+  font-family:var(--npt-font-display),sans-serif;font-weight:800;
+  font-size:clamp(15px,1.5vw,18px);white-space:nowrap;
+  color:var(--md-sys-color-on-surface-variant);
+  transition:color var(--npt-dur-fast) var(--npt-ease-standard);
+}
+.marquee__item .dot{
+  inline-size:8px;block-size:8px;border-radius:50%;flex:none;
+  background:var(--npt-brand-coral);opacity:.8;
+}
+.marquee__item:hover{color:var(--md-sys-color-on-surface)}
+
+
+/* ---------------------------------------------------------------------------
+   9 · bento grid — the flagship layout on the home page
+   ------------------------------------------------------------------------ */
+.bento{
+  display:grid;gap:18px;
+  grid-template-columns:repeat(6,1fr);
+  grid-auto-rows:minmax(150px,auto);
+}
+.bento > *{grid-column:span 2}
+.bento .b-wide{grid-column:span 3}
+.bento .b-hero{grid-column:span 4;grid-row:span 2}
+.bento .b-tall{grid-column:span 2;grid-row:span 2}
+@media (max-width:1000px){
+  .bento{grid-template-columns:repeat(4,1fr)}
+  .bento > *{grid-column:span 2}
+  .bento .b-wide,.bento .b-hero{grid-column:span 4}
+  .bento .b-hero,.bento .b-tall{grid-row:span 1}
+  .bento .b-tall{grid-column:span 2}
+}
+@media (max-width:620px){
+  .bento{grid-template-columns:1fr}
+  .bento > *,.bento .b-wide,.bento .b-hero,.bento .b-tall{grid-column:span 1}
+}
+
+/* the feature tile inside the bento is dark, whatever the mode */
+.tile-dark{
+  position:relative;overflow:clip;color:#fff;
+  border:1px solid color-mix(in oklab,#fff 14%,transparent);
+  background:
+    radial-gradient(110% 80% at 82% 6%,color-mix(in oklab,var(--npt-deep-3) 90%,var(--npt-brand-sky)),transparent 60%),
+    linear-gradient(150deg,var(--npt-deep-0),var(--npt-deep-2) 58%,var(--npt-deep-3));
+}
+.tile-dark h3,.tile-dark .card__sub{color:#fff}
+.tile-dark .card__sub{color:color-mix(in oklab,#fff 70%,var(--npt-brand-coral))}
+.tile-dark p{color:color-mix(in oklab,#fff 74%,transparent)}
+.tile-dark .card__go{color:var(--npt-brand-beige)}
+.tile-dark::before{
+  background:radial-gradient(340px circle at var(--mx,50%) var(--my,50%),
+    color-mix(in oklab,var(--npt-brand-coral) 26%,transparent),transparent 62%);
+}
+.tile-dark:hover{border-color:color-mix(in oklab,#fff 30%,transparent)}
+
+
+/* ---------------------------------------------------------------------------
+   10 · metric rail + capability ledger
+   ------------------------------------------------------------------------ */
+.rail{
+  display:grid;gap:1px;border-radius:var(--npt-corner-lg);overflow:hidden;
+  background:var(--md-sys-color-outline-variant);
+  grid-template-columns:repeat(auto-fit,minmax(min(210px,100%),1fr));
+}
+.rail > div{
+  background:color-mix(in oklab,var(--md-sys-color-surface-container-lowest) 92%,transparent);
+  padding:26px 24px;display:grid;gap:6px;
+  transition:background var(--npt-dur-standard) var(--npt-ease-standard);
+}
+[data-mode="dark"] .rail > div{background:color-mix(in oklab,var(--md-sys-color-surface-container-low) 92%,transparent)}
+.rail > div:hover{background:color-mix(in oklab,var(--npt-brand-sky) 9%,var(--md-sys-color-surface-container-lowest))}
+.rail b{
+  font-family:var(--npt-font-display),sans-serif;font-weight:900;
+  font-size:clamp(1.9rem,3.4vw,2.6rem);line-height:1;font-variant-numeric:tabular-nums;
+  background:linear-gradient(120deg,var(--md-sys-color-on-surface),var(--npt-brand-sky));
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;
+}
+.rail .plus{color:var(--npt-brand-coral);-webkit-text-fill-color:var(--npt-brand-coral)}
+.rail span{font-size:13.5px;font-weight:600;color:var(--md-sys-color-on-surface-variant)}
+
+/* client cards on the dark panel */
+.client-row{
+  display:flex;align-items:center;gap:16px;padding:18px 20px;
+  border-radius:var(--npt-corner-md);
+  background:color-mix(in oklab,#fff 7%,transparent);
+  border:1px solid color-mix(in oklab,#fff 14%,transparent);
+  transition:transform var(--npt-dur-standard) var(--npt-ease-spring),
+             background var(--npt-dur-standard) var(--npt-ease-standard),
+             border-color var(--npt-dur-standard) var(--npt-ease-standard);
+}
+.client-row:hover{
+  transform:translateX(4px);
+  background:color-mix(in oklab,#fff 12%,transparent);
+  border-color:color-mix(in oklab,var(--npt-brand-sky) 40%,transparent);
+}
+[dir="rtl"] .client-row:hover{transform:translateX(-4px)}
+.client-row .mark{
+  inline-size:46px;block-size:46px;flex:none;border-radius:var(--npt-corner-sm);
+  display:grid;place-items:center;font-weight:900;font-size:15px;
+  font-family:var(--npt-font-display),sans-serif;letter-spacing:-.02em;
+  background:linear-gradient(135deg,color-mix(in oklab,var(--npt-brand-sky) 34%,transparent),
+                                    color-mix(in oklab,var(--npt-brand-coral) 30%,transparent));
+  border:1px solid color-mix(in oklab,#fff 22%,transparent);color:#fff;
+}
+[dir="rtl"] .client-row .mark{letter-spacing:0}
+.client-row .meta{display:grid;gap:3px;min-inline-size:0}
+.client-row .meta b{font-size:15.5px;font-weight:800;color:#fff}
+.client-row .meta span{font-size:13px;color:color-mix(in oklab,#fff 66%,transparent)}
+
+/* "live" pip */
+.live{
+  display:inline-flex;align-items:center;gap:8px;font-size:11.5px;font-weight:800;
+  letter-spacing:.06em;text-transform:uppercase;
+  color:color-mix(in oklab,#fff 84%,transparent);
+  padding:5px 12px;border-radius:var(--npt-corner-full);
+  background:color-mix(in oklab,var(--md-sys-color-success) 26%,transparent);
+  border:1px solid color-mix(in oklab,var(--md-sys-color-success) 46%,transparent);
+}
+[dir="rtl"] .live{letter-spacing:0}
+.live::before{
+  content:"";inline-size:7px;block-size:7px;border-radius:50%;flex:none;
+  background:var(--md-sys-color-success);
+  animation:npt-blink 2.2s var(--npt-ease-standard) infinite;
+}
+@keyframes npt-blink{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(.82)}}
+
+
+/* ---------------------------------------------------------------------------
+   11 · navy panel — animated aurora skin
+   ------------------------------------------------------------------------ */
+.navy-panel{
+  background:
+    radial-gradient(110% 90% at 84% 4%,color-mix(in oklab,var(--npt-deep-3) 88%,var(--npt-brand-sky)),transparent 58%),
+    linear-gradient(150deg,var(--npt-deep-0),var(--npt-deep-2) 56%,var(--npt-deep-3));
+  border:1px solid color-mix(in oklab,#fff 12%,transparent);
+}
+.navy-panel::after{
+  content:"";position:absolute;inset:-30%;pointer-events:none;z-index:0;opacity:.5;
+  background:
+    radial-gradient(38% 38% at 22% 78%,color-mix(in oklab,var(--npt-brand-teal) 42%,transparent),transparent 70%),
+    radial-gradient(34% 34% at 82% 24%,color-mix(in oklab,var(--npt-brand-coral) 34%,transparent),transparent 70%);
+  filter:blur(40px);
+  animation:npt-panel-drift 24s var(--npt-ease-standard) infinite alternate;
+}
+@keyframes npt-panel-drift{
+  from{transform:translate3d(-4%,-3%,0) scale(1)}
+  to{transform:translate3d(6%,5%,0) scale(1.14)}
+}
+
+
+/* ---------------------------------------------------------------------------
+   12 · section seam — a drawn hairline that scribes itself in on scroll
+   ------------------------------------------------------------------------ */
+.seam{position:relative;block-size:1px;background:var(--md-sys-color-outline-variant);overflow:visible}
+.seam::before{
+  content:"";position:absolute;inset-block-start:0;inset-inline-start:0;block-size:1px;inline-size:100%;
+  transform:scaleX(0);transform-origin:left center;
+  background:linear-gradient(90deg,transparent,var(--npt-brand-coral),var(--npt-brand-sky),transparent);
+  transition:transform 1.4s var(--npt-ease-out-quint);
+}
+[dir="rtl"] .seam::before{transform-origin:right center}
+.seam.in::before{transform:scaleX(1)}
+
+
+/* ---------------------------------------------------------------------------
+   13 · reveal — upgraded to blur + lift, staggered further
+   ------------------------------------------------------------------------ */
+.reveal{
+  opacity:0;transform:translateY(28px);filter:blur(8px);
+  transition:opacity var(--npt-dur-reveal) var(--npt-ease-standard),
+             transform var(--npt-dur-reveal) var(--npt-ease-out-quint),
+             filter var(--npt-dur-reveal) var(--npt-ease-standard);
+}
+.reveal.in{opacity:1;transform:none;filter:none}
+.reveal-stagger > *{
+  opacity:0;transform:translateY(26px) scale(.985);filter:blur(6px);
+  transition:opacity .8s var(--npt-ease-standard),
+             transform .8s var(--npt-ease-out-quint),
+             filter .8s var(--npt-ease-standard);
+}
+.reveal-stagger.in > *{opacity:1;transform:none;filter:none}
+.reveal-stagger.in > :nth-child(n){transition-delay:0ms}
+.reveal-stagger.in > :nth-child(2){transition-delay:70ms}
+.reveal-stagger.in > :nth-child(3){transition-delay:140ms}
+.reveal-stagger.in > :nth-child(4){transition-delay:210ms}
+.reveal-stagger.in > :nth-child(5){transition-delay:280ms}
+.reveal-stagger.in > :nth-child(6){transition-delay:350ms}
+.reveal-stagger.in > :nth-child(7){transition-delay:420ms}
+.reveal-stagger.in > :nth-child(8){transition-delay:490ms}
+.reveal-stagger.in > :nth-child(9){transition-delay:560ms}
+.reveal-stagger.in > :nth-child(10){transition-delay:630ms}
+
+
+/* ---------------------------------------------------------------------------
+   14 · pointer aura — fine pointers only, never on touch
+   ------------------------------------------------------------------------ */
+.npt-aura{
+  position:fixed;inset-block-start:0;inset-inline-start:0;z-index:0;
+  inline-size:440px;block-size:440px;margin:-220px 0 0 -220px;
+  border-radius:50%;pointer-events:none;opacity:0;
+  background:radial-gradient(circle,color-mix(in oklab,var(--npt-brand-sky) 13%,transparent),transparent 62%);
+  transition:opacity 600ms var(--npt-ease-standard);
+  will-change:transform;
+}
+.npt-aura.lit{opacity:1}
+@media (hover:none),(pointer:coarse){.npt-aura{display:none}}
+
+
+/* ---------------------------------------------------------------------------
+   15 · footer — living tide
+   ------------------------------------------------------------------------ */
+.site-footer{
+  background:
+    radial-gradient(100% 90% at 12% 100%,color-mix(in oklab,var(--npt-deep-3) 86%,var(--npt-brand-teal)),transparent 62%),
+    linear-gradient(160deg,var(--npt-deep-2),var(--npt-deep-0) 74%);
+}
+.site-footer::after{
+  content:"";position:absolute;inset-block-start:0;inset-inline:0;block-size:1px;pointer-events:none;
+  background:linear-gradient(90deg,transparent,
+    color-mix(in oklab,var(--npt-brand-sky) 60%,transparent) 34%,
+    color-mix(in oklab,var(--npt-brand-coral) 60%,transparent) 66%,transparent);
+}
+.footer-col a{position:relative;display:inline-block}
+.footer-col a::after{
+  content:"";position:absolute;inset-block-end:-2px;inset-inline-start:0;
+  inline-size:0;block-size:1.5px;background:var(--npt-brand-coral);
+  transition:inline-size var(--npt-dur-fast) var(--npt-ease-standard);
+}
+.footer-col a:hover::after{inline-size:100%}
+
+
+/* ---------------------------------------------------------------------------
+   16 · misc polish
+   ------------------------------------------------------------------------ */
+.eyebrow{position:relative}
+.badge{backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.spec > div:nth-child(odd){background:color-mix(in oklab,var(--md-sys-color-surface-container-low) 76%,transparent)}
+.contact-rows a{background:color-mix(in oklab,var(--md-sys-color-surface-container-lowest) 88%,transparent)}
+[data-mode="dark"] .contact-rows a{background:color-mix(in oklab,var(--md-sys-color-surface-container-low) 88%,transparent)}
+.field input,.field select,.field textarea{
+  background:color-mix(in oklab,var(--md-sys-color-surface-container-lowest) 90%,transparent);
+}
+[data-mode="dark"] .field input,[data-mode="dark"] .field select,[data-mode="dark"] .field textarea{
+  background:color-mix(in oklab,var(--md-sys-color-surface-container-low) 90%,transparent);
+}
+
+/* pretty scrollbar on the platforms that honour it */
+@supports selector(::-webkit-scrollbar){
+  ::-webkit-scrollbar{inline-size:11px;block-size:11px}
+  ::-webkit-scrollbar-track{background:transparent}
+  ::-webkit-scrollbar-thumb{
+    border-radius:99px;border:3px solid transparent;background-clip:content-box;
+    background-color:color-mix(in oklab,var(--md-sys-color-primary) 34%,transparent);
+  }
+  ::-webkit-scrollbar-thumb:hover{background-color:color-mix(in oklab,var(--md-sys-color-primary) 55%,transparent)}
+}
+
+
+/* ---------------------------------------------------------------------------
+   17 · guards — reduced motion, small screens, print, low power
+   Everything above degrades to a still, fully legible page.
+   ------------------------------------------------------------------------ */
+@media (max-width:720px){
+  /* blur is the expensive part on phones — shrink the radius, drop the count */
+  :root{--npt-orb-blur:clamp(38px,9vmax,64px);--npt-card-blur:0px}
+  .card{-webkit-backdrop-filter:none;backdrop-filter:none}
+  .hero__inner{padding-block:clamp(72px,16vw,110px)}
+  .marquee__track{animation-duration:26s}
+}
+
+@media (prefers-reduced-motion:reduce){
+  .npt-field b,.navy-panel::after,.marquee__track,.grad-word,
+  .hero .eyebrow::before,.live::before{animation:none!important}
+  .kinetic .w > i{transform:none!important;opacity:1!important}
+  .npt-web{opacity:.5!important;transition:none}
+  .seam::before{transform:scaleX(1)!important;transition:none}
+  .npt-aura{display:none}
+  .npt-progress i{transition:none}
+}
+
+@media print{
+  .npt-field,.npt-grain,.npt-web,.npt-aura,.npt-progress{display:none!important}
+  body{background:#fff;color:#000}
+}
+
+
+/* ============================================================================
+   18 · FAQ accordion
+   ========================================================================== */
+.faq{display:grid;gap:12px}
+.faq__item{
+  border:1px solid var(--md-sys-color-outline-variant);
+  border-radius:var(--npt-corner-lg);
+  background:color-mix(in oklab,var(--md-sys-color-surface-container-lowest) 95%,transparent);
+  overflow:hidden;
+  transition:border-color var(--npt-dur-standard) var(--npt-ease-standard),
+             box-shadow var(--npt-dur-standard) var(--npt-ease-standard),
+             background var(--npt-dur-standard) var(--npt-ease-standard);
+}
+[data-mode="dark"] .faq__item{background:color-mix(in oklab,var(--md-sys-color-surface-container-low) 92%,transparent)}
+.faq__item:hover{border-color:color-mix(in oklab,var(--md-sys-color-primary) 26%,var(--md-sys-color-outline-variant))}
+.faq__item.open{
+  border-color:color-mix(in oklab,var(--npt-brand-coral) 42%,var(--md-sys-color-outline-variant));
+  box-shadow:var(--npt-shadow-soft);
+}
+.faq__q{
+  inline-size:100%;display:flex;align-items:center;gap:16px;
+  padding:20px 24px;text-align:start;
+  font-family:var(--npt-font-display),sans-serif;font-weight:800;
+  font-size:clamp(15.5px,1.5vw,17.5px);line-height:1.4;
+  color:var(--md-sys-color-on-surface);
+}
+.faq__q span{flex:1;min-inline-size:0}
+.faq__q .sign{
+  flex:none;inline-size:30px;block-size:30px;border-radius:50%;position:relative;
+  background:var(--md-sys-color-secondary-container);
+  transition:background var(--npt-dur-standard) var(--npt-ease-standard),
+             transform var(--npt-dur-standard) var(--npt-ease-spring);
+}
+.faq__q .sign::before,.faq__q .sign::after{
+  content:"";position:absolute;inset-block-start:50%;inset-inline-start:50%;
+  background:var(--md-sys-color-on-secondary-container);border-radius:2px;
+  transform:translate(-50%,-50%);
+  transition:opacity var(--npt-dur-fast) var(--npt-ease-standard),
+             transform var(--npt-dur-standard) var(--npt-ease-spring);
+}
+.faq__q .sign::before{inline-size:13px;block-size:2.4px}
+.faq__q .sign::after{inline-size:2.4px;block-size:13px}
+.faq__item.open .sign{background:var(--npt-brand-coral);transform:rotate(180deg)}
+.faq__item.open .sign::before,.faq__item.open .sign::after{background:#fff}
+.faq__item.open .sign::after{opacity:0;transform:translate(-50%,-50%) rotate(90deg)}
+.faq__a{
+  max-block-size:0;overflow:hidden;
+  transition:max-block-size var(--npt-dur-slow) var(--npt-ease-out-quint);
+}
+.faq__a > div{padding:0 24px 22px;max-inline-size:78ch}
+.faq__a p{color:var(--md-sys-color-on-surface-variant);font-size:15.5px}
+.faq__a p + p{margin-block-start:10px}
+.faq__a a{color:var(--md-sys-color-tertiary);font-weight:800;text-decoration:underline;text-underline-offset:3px}
+
+
+/* ============================================================================
+   19 · footprint — markets, languages, offices
+   ========================================================================== */
+.chip-cloud{display:flex;flex-wrap:wrap;gap:10px}
+.chip{
+  display:inline-flex;align-items:center;gap:9px;
+  padding:9px 16px;border-radius:var(--npt-corner-full);
+  font-size:14px;font-weight:700;
+  background:color-mix(in oklab,var(--md-sys-color-surface-container-lowest) 86%,transparent);
+  border:1px solid var(--md-sys-color-outline-variant);
+  color:var(--md-sys-color-on-surface-variant);
+  transition:transform var(--npt-dur-fast) var(--npt-ease-spring),
+             border-color var(--npt-dur-fast) var(--npt-ease-standard),
+             color var(--npt-dur-fast) var(--npt-ease-standard);
+}
+[data-mode="dark"] .chip{background:color-mix(in oklab,var(--md-sys-color-surface-container-low) 86%,transparent)}
+.chip:hover{
+  transform:translateY(-2px);
+  border-color:color-mix(in oklab,var(--npt-brand-sky) 50%,transparent);
+  color:var(--md-sys-color-on-surface);
+}
+.chip .tag{
+  font-size:11px;font-weight:900;letter-spacing:.06em;text-transform:uppercase;
+  padding:2px 8px;border-radius:var(--npt-corner-full);
+  background:var(--md-sys-color-tertiary-container);color:var(--md-sys-color-on-tertiary-container);
+}
+[dir="rtl"] .chip .tag{letter-spacing:0}
+.chip--on{
+  background:color-mix(in oklab,#fff 8%,transparent);
+  border-color:color-mix(in oklab,#fff 18%,transparent);
+  color:color-mix(in oklab,#fff 84%,transparent);
+}
+.chip--on:hover{color:#fff;border-color:color-mix(in oklab,var(--npt-brand-sky) 55%,transparent)}
+
+/* office cards */
+.offices{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(min(260px,100%),1fr))}
+.office{
+  position:relative;overflow:clip;
+  padding:24px;border-radius:var(--npt-corner-lg);
+  background:color-mix(in oklab,var(--md-sys-color-surface-container-lowest) 95%,transparent);
+  border:1px solid var(--md-sys-color-outline-variant);
+  display:grid;gap:8px;
+}
+[data-mode="dark"] .office{background:color-mix(in oklab,var(--md-sys-color-surface-container-low) 88%,transparent)}
+/* The bar starts at the content inset, not at 0: at inset 0 the 24px corner
+   radius clips its leading end and the remainder reads as floating loose. */
+.office::after{
+  content:"";position:absolute;inset-block-start:0;inset-inline-start:24px;
+  inline-size:56px;block-size:3px;border-radius:0 0 3px 3px;
+  background:linear-gradient(90deg,var(--npt-brand-coral),var(--npt-brand-sky));
+}
+.office .flagline{font-size:12px;font-weight:900;letter-spacing:.09em;text-transform:uppercase;color:var(--md-sys-color-tertiary)}
+[dir="rtl"] .office .flagline{letter-spacing:0}
+.office h4{font-size:1.15rem}
+.office p{font-size:14.5px;color:var(--md-sys-color-on-surface-variant)}
+
+/* audience switcher — banks vs mobile operators vs fintechs */
+.aud{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(min(280px,100%),1fr))}
+.aud__card{
+  position:relative;overflow:clip;display:grid;gap:12px;align-content:start;
+  padding:28px;border-radius:var(--npt-corner-xl);
+  border:1px solid color-mix(in oklab,#fff 14%,transparent);
+  background:linear-gradient(160deg,color-mix(in oklab,#fff 9%,transparent),color-mix(in oklab,#fff 3%,transparent));
+  color:#fff;
+  transition:transform var(--npt-dur-standard) var(--npt-ease-spring),
+             border-color var(--npt-dur-standard) var(--npt-ease-standard);
+}
+.aud__card:hover{transform:translateY(-5px);border-color:color-mix(in oklab,var(--npt-brand-sky) 48%,transparent)}
+.aud__card h3{font-size:1.28rem;color:#fff}
+.aud__card p{font-size:15px;color:color-mix(in oklab,#fff 74%,transparent)}
+.aud__card ul{display:grid;gap:8px;font-size:14.5px;color:color-mix(in oklab,#fff 80%,transparent)}
+.aud__card li{display:flex;gap:10px;align-items:flex-start}
+.aud__card li::before{
+  content:"";flex:none;inline-size:6px;block-size:6px;border-radius:50%;
+  margin-block-start:8px;background:var(--npt-brand-coral);
+}
+
+
+/* ============================================================================
+   20 · Concierge — the lead assistant
+   Guided, scripted, no network calls. It qualifies and hands off to the quote
+   form with the answers already filled in.
+   ========================================================================== */
+.cx-launch{
+  position:fixed;inset-block-end:22px;inset-inline-end:22px;z-index:130;
+  display:inline-flex;align-items:center;gap:11px;
+  padding:13px 20px 13px 15px;border-radius:var(--npt-corner-full);
+  font-family:var(--npt-font-display),sans-serif;font-weight:800;font-size:15px;
+  color:#fff;background:linear-gradient(135deg,var(--npt-deep-2),var(--npt-deep-3));
+  border:1px solid color-mix(in oklab,#fff 20%,transparent);
+  box-shadow:0 16px 40px -14px color-mix(in oklab,var(--npt-brand-navy) 90%,transparent);
+  transition:transform var(--npt-dur-standard) var(--npt-ease-spring),
+             box-shadow var(--npt-dur-standard) var(--npt-ease-standard),
+             opacity var(--npt-dur-standard) var(--npt-ease-standard);
+}
+[dir="rtl"] .cx-launch{padding:13px 15px 13px 20px}
+.cx-launch:hover{transform:translateY(-3px);box-shadow:0 22px 52px -14px color-mix(in oklab,var(--npt-brand-navy) 95%,transparent)}
+.cx-launch .av{
+  inline-size:30px;block-size:30px;flex:none;border-radius:50%;display:grid;place-items:center;
+  background:linear-gradient(135deg,var(--npt-brand-coral),var(--npt-brand-sky));
+}
+.cx-launch .av svg{inline-size:17px;block-size:17px;color:#fff}
+.cx-launch .ping{
+  position:absolute;inset-block-start:9px;inset-inline-end:14px;
+  inline-size:9px;block-size:9px;border-radius:50%;background:var(--md-sys-color-success);
+  box-shadow:0 0 0 2px color-mix(in oklab,var(--npt-deep-2) 90%,transparent);
+  animation:npt-blink 2.4s var(--npt-ease-standard) infinite;
+}
+.cx-launch[hidden]{display:none}
+body.cx-open .cx-launch{opacity:0;pointer-events:none;transform:scale(.9)}
+@media (max-width:520px){
+  .cx-launch{inset-block-end:16px;inset-inline-end:16px;padding:12px 17px 12px 13px;font-size:14px}
+  [dir="rtl"] .cx-launch{padding:12px 13px 12px 17px}
+  .cx-launch .label{display:none}
+  .cx-launch{border-radius:50%;padding:14px}
+}
+
+.cx{
+  position:fixed;inset-block-end:22px;inset-inline-end:22px;z-index:131;
+  inline-size:min(400px,calc(100vw - 32px));
+  max-block-size:min(640px,calc(100dvh - 100px));
+  display:none;flex-direction:column;overflow:hidden;
+  border-radius:var(--npt-corner-xl);
+  background:color-mix(in oklab,var(--md-sys-color-surface-container-lowest) 94%,transparent);
+  -webkit-backdrop-filter:blur(26px) saturate(1.5);backdrop-filter:blur(26px) saturate(1.5);
+  border:1px solid var(--md-sys-color-outline-variant);
+  box-shadow:0 34px 80px -28px color-mix(in oklab,var(--md-sys-color-scrim) 60%,transparent);
+  transform:translateY(18px) scale(.96);opacity:0;
+  transition:transform var(--npt-dur-standard) var(--npt-ease-spring),
+             opacity var(--npt-dur-standard) var(--npt-ease-standard);
+}
+[data-mode="dark"] .cx{background:color-mix(in oklab,var(--md-sys-color-surface-container) 94%,transparent)}
+.cx.open{display:flex}
+.cx.shown{transform:none;opacity:1}
+@media (max-width:520px){
+  .cx{
+    inset:auto 0 0 0;inline-size:100%;max-block-size:82dvh;
+    border-radius:var(--npt-corner-xl) var(--npt-corner-xl) 0 0;
+  }
+}
+
+.cx__top{
+  display:flex;align-items:center;gap:13px;padding:16px 18px;flex:none;color:#fff;
+  background:linear-gradient(135deg,var(--npt-deep-1),var(--npt-deep-3));
+}
+.cx__top .av{
+  inline-size:40px;block-size:40px;flex:none;border-radius:50%;display:grid;place-items:center;
+  background:linear-gradient(135deg,var(--npt-brand-coral),var(--npt-brand-sky));
+}
+.cx__top .av svg{inline-size:21px;block-size:21px;color:#fff}
+.cx__top .who{flex:1;min-inline-size:0;display:grid;gap:2px}
+.cx__top .who b{font-family:var(--npt-font-display),sans-serif;font-size:15.5px;font-weight:800}
+.cx__top .who span{font-size:12px;color:color-mix(in oklab,#fff 70%,transparent);display:flex;align-items:center;gap:6px}
+.cx__top .who span::before{
+  content:"";inline-size:6px;block-size:6px;border-radius:50%;background:var(--md-sys-color-success);
+}
+.cx__x{
+  inline-size:34px;block-size:34px;flex:none;border-radius:50%;display:grid;place-items:center;
+  color:color-mix(in oklab,#fff 80%,transparent);
+  transition:background var(--npt-dur-fast) var(--npt-ease-standard),color var(--npt-dur-fast) var(--npt-ease-standard);
+}
+.cx__x:hover{background:color-mix(in oklab,#fff 16%,transparent);color:#fff}
+.cx__x svg{inline-size:18px;block-size:18px}
+
+.cx__body{
+  flex:1;min-block-size:0;overflow-y:auto;overscroll-behavior:contain;
+  padding:18px;display:grid;gap:12px;align-content:start;
+  scrollbar-width:thin;
+}
+
+.cx-msg{display:flex;gap:10px;align-items:flex-end;max-inline-size:88%}
+.cx-msg .bubble{
+  padding:12px 16px;border-radius:18px;font-size:14.8px;line-height:1.6;
+  animation:npt-bubble .42s var(--npt-ease-out-quint) both;
+}
+@keyframes npt-bubble{from{opacity:0;transform:translateY(9px) scale(.97)}to{opacity:1;transform:none}}
+.cx-msg--bot .bubble{
+  background:var(--md-sys-color-surface-container-high);
+  color:var(--md-sys-color-on-surface);
+  border-start-start-radius:6px;
+}
+.cx-msg--me{margin-inline-start:auto;flex-direction:row-reverse}
+.cx-msg--me .bubble{
+  background:linear-gradient(135deg,var(--npt-deep-2),var(--npt-deep-3));color:#fff;
+  border-end-end-radius:6px;font-weight:700;
+}
+.cx-msg .bubble b{font-weight:800}
+.cx-msg .bubble a{color:var(--md-sys-color-tertiary);font-weight:800;text-decoration:underline;text-underline-offset:3px}
+.cx-msg--me .bubble a{color:var(--npt-brand-beige)}
+
+.cx-typing{display:inline-flex;gap:5px;align-items:center;padding:4px 2px}
+.cx-typing i{
+  inline-size:7px;block-size:7px;border-radius:50%;display:block;
+  background:var(--md-sys-color-on-surface-variant);opacity:.45;
+  animation:npt-type 1.15s var(--npt-ease-standard) infinite;
+}
+.cx-typing i:nth-child(2){animation-delay:.16s}
+.cx-typing i:nth-child(3){animation-delay:.32s}
+@keyframes npt-type{0%,60%,100%{transform:translateY(0);opacity:.4}30%{transform:translateY(-5px);opacity:1}}
+
+.cx__foot{
+  flex:none;padding:14px 16px 16px;display:grid;gap:9px;
+  border-block-start:1px solid var(--md-sys-color-outline-variant);
+  background:color-mix(in oklab,var(--md-sys-color-surface-container-low) 70%,transparent);
+}
+.cx-chips{display:flex;flex-wrap:wrap;gap:8px}
+.cx-chip{
+  padding:10px 15px;border-radius:var(--npt-corner-full);
+  font-size:14px;font-weight:700;text-align:start;
+  background:color-mix(in oklab,var(--md-sys-color-surface-container-lowest) 92%,transparent);
+  border:1.5px solid var(--md-sys-color-outline-variant);
+  color:var(--md-sys-color-on-surface);
+  transition:transform var(--npt-dur-fast) var(--npt-ease-spring),
+             border-color var(--npt-dur-fast) var(--npt-ease-standard),
+             background var(--npt-dur-fast) var(--npt-ease-standard);
+}
+.cx-chip:hover{
+  transform:translateY(-2px);
+  border-color:var(--npt-brand-coral);
+  background:color-mix(in oklab,var(--npt-brand-coral) 10%,var(--md-sys-color-surface-container-lowest));
+}
+.cx-chip--go{
+  background:linear-gradient(135deg,var(--npt-deep-2),var(--npt-deep-3));
+  color:#fff;border-color:transparent;inline-size:100%;text-align:center;justify-content:center;
+  display:inline-flex;align-items:center;gap:9px;padding:13px 18px;font-weight:800;
+}
+.cx-chip--go:hover{background:linear-gradient(135deg,var(--npt-deep-3),var(--npt-brand-navy));border-color:transparent}
+.cx-chip--ghost{background:transparent}
+.cx__legal{
+  font-size:11.5px;line-height:1.5;color:var(--md-sys-color-on-surface-variant);
+  text-align:center;
+}
+.cx__legal a{text-decoration:underline;text-underline-offset:2px}
+
+@media (prefers-reduced-motion:reduce){
+  .cx,.cx-msg .bubble,.cx-typing i,.cx-launch .ping{animation:none!important;transition:none!important}
+  .cx.open{transform:none;opacity:1}
+}
