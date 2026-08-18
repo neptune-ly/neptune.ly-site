@@ -32,30 +32,33 @@
   --md-sys-color-success:oklch(0.545 0.13 152);
   --md-sys-color-error:oklch(0.52 0.2 27);
   --md-sys-color-on-error:oklch(0.99 0.02 27);
-  --md-sys-color-background:oklch(0.985 0.005 250);
-  --md-sys-color-on-background:oklch(0.17 0.03 255);
-  --md-sys-color-surface:oklch(0.985 0.005 250);
-  --md-sys-color-on-surface:oklch(0.17 0.03 255);
-  --md-sys-color-surface-variant:oklch(0.9 0.015 250);
-  --md-sys-color-on-surface-variant:oklch(0.4 0.025 252);
-  --md-sys-color-outline:oklch(0.62 0.02 252);
-  --md-sys-color-outline-variant:oklch(0.87 0.012 250);
-  --md-sys-color-surface-container-lowest:oklch(1 0 0);
-  --md-sys-color-surface-container-low:oklch(0.968 0.006 250);
-  --md-sys-color-surface-container:oklch(0.95 0.008 250);
-  --md-sys-color-surface-container-high:oklch(0.93 0.01 250);
-  --md-sys-color-surface-container-highest:oklch(0.91 0.012 250);
+  /* warm paper, not clinic-white: surfaces lean toward the brand Sand so the
+     light theme reads as a printed artifact a human can sit with */
+  --md-sys-color-background:oklch(0.981 0.008 84);
+  --md-sys-color-on-background:oklch(0.22 0.035 255);
+  --md-sys-color-surface:oklch(0.981 0.008 84);
+  --md-sys-color-on-surface:oklch(0.22 0.035 255);
+  --md-sys-color-surface-variant:oklch(0.9 0.014 84);
+  --md-sys-color-on-surface-variant:oklch(0.41 0.03 252);
+  --md-sys-color-outline:oklch(0.6 0.02 252);
+  --md-sys-color-outline-variant:oklch(0.865 0.013 84);
+  --md-sys-color-surface-container-lowest:oklch(0.998 0.003 84);
+  --md-sys-color-surface-container-low:oklch(0.964 0.009 84);
+  --md-sys-color-surface-container:oklch(0.946 0.01 84);
+  --md-sys-color-surface-container-high:oklch(0.927 0.011 84);
+  --md-sys-color-surface-container-highest:oklch(0.908 0.012 84);
   --md-sys-color-inverse-surface:oklch(0.24 0.04 255);
   --md-sys-color-inverse-on-surface:oklch(0.96 0.006 250);
   --md-sys-color-scrim:oklch(0.08 0.02 255);
 
-  /* type */
-  --npt-font-display:'Nunito';
-  --npt-font-text:'Nunito';
+  /* type — BRAND.md: Baloo 2 display (ui-rounded lineage), Hanken Grotesk text */
+  --npt-font-display:'Baloo 2';
+  --npt-font-text:'Hanken Grotesk';
+  --npt-font-num:'Hanken Grotesk';
   --npt-font-display-ar:'Beiruti';
   --npt-font-text-ar:'Beiruti';
-  --npt-display-tracking:-0.02em;
-  --npt-display-weight:800;
+  --npt-display-tracking:-0.015em;
+  --npt-display-weight:700;
 
   /* shape (Neptune scale) */
   --npt-corner-xs:8px; --npt-corner-sm:12px; --npt-corner-md:16px;
@@ -102,19 +105,21 @@
   --md-sys-color-success:oklch(0.78 0.12 152);
   --md-sys-color-error:oklch(0.78 0.13 27);
   --md-sys-color-on-error:oklch(0.24 0.1 27);
-  --md-sys-color-background:oklch(0.145 0.025 255);
-  --md-sys-color-on-background:oklch(0.93 0.01 250);
-  --md-sys-color-surface:oklch(0.145 0.025 255);
-  --md-sys-color-on-surface:oklch(0.93 0.01 250);
-  --md-sys-color-surface-variant:oklch(0.33 0.03 252);
-  --md-sys-color-on-surface-variant:oklch(0.79 0.02 248);
-  --md-sys-color-outline:oklch(0.57 0.02 250);
-  --md-sys-color-outline-variant:oklch(0.31 0.025 252);
-  --md-sys-color-surface-container-lowest:oklch(0.105 0.022 255);
-  --md-sys-color-surface-container-low:oklch(0.17 0.026 255);
-  --md-sys-color-surface-container:oklch(0.19 0.028 255);
-  --md-sys-color-surface-container-high:oklch(0.23 0.03 255);
-  --md-sys-color-surface-container-highest:oklch(0.28 0.032 255);
+  /* lifted warm ink, not a void: less chroma, a step brighter, and warm
+     off-white text — dark mode for reading at night, not for a demo reel */
+  --md-sys-color-background:oklch(0.162 0.018 255);
+  --md-sys-color-on-background:oklch(0.915 0.008 84);
+  --md-sys-color-surface:oklch(0.162 0.018 255);
+  --md-sys-color-on-surface:oklch(0.915 0.008 84);
+  --md-sys-color-surface-variant:oklch(0.33 0.024 252);
+  --md-sys-color-on-surface-variant:oklch(0.775 0.015 84);
+  --md-sys-color-outline:oklch(0.57 0.018 250);
+  --md-sys-color-outline-variant:oklch(0.32 0.02 252);
+  --md-sys-color-surface-container-lowest:oklch(0.125 0.016 255);
+  --md-sys-color-surface-container-low:oklch(0.185 0.019 255);
+  --md-sys-color-surface-container:oklch(0.205 0.02 255);
+  --md-sys-color-surface-container-high:oklch(0.243 0.022 255);
+  --md-sys-color-surface-container-highest:oklch(0.29 0.024 255);
   --md-sys-color-inverse-surface:oklch(0.93 0.01 250);
   --md-sys-color-inverse-on-surface:oklch(0.21 0.03 255);
   --md-sys-color-scrim:oklch(0 0 0);
@@ -161,7 +166,7 @@ main{flex:1}
 
 /* ---------- typography ---------- */
 h1,h2,h3,h4{font-family:var(--npt-font-display),system-ui,sans-serif;letter-spacing:var(--npt-display-tracking);line-height:1.14;font-weight:var(--npt-display-weight);text-wrap:balance}
-.display-xl{font-size:clamp(2.5rem,6.2vw,4.4rem);font-weight:900}
+.display-xl{font-size:clamp(2.6rem,6.2vw,4.6rem);font-weight:800;line-height:1.06}
 .display-lg{font-size:clamp(2rem,4.4vw,3.1rem)}
 .display-md{font-size:clamp(1.55rem,3vw,2.15rem)}
 .lede{font-size:clamp(1.05rem,1.6vw,1.24rem);color:var(--md-sys-color-on-surface-variant);max-width:62ch;text-wrap:pretty}
@@ -241,7 +246,7 @@ h1,h2,h3,h4{font-family:var(--npt-font-display),system-ui,sans-serif;letter-spac
 .btn{
   position:relative;display:inline-flex;align-items:center;justify-content:center;gap:10px;
   min-block-size:50px;padding:12px 26px;border-radius:var(--npt-corner-full);
-  font-family:var(--npt-font-display),sans-serif;font-weight:800;font-size:16px;
+  font-family:var(--npt-font-text),sans-serif;font-weight:700;font-size:16px;
   background:var(--md-sys-color-primary);color:var(--md-sys-color-on-primary);
   overflow:hidden;isolation:isolate;
   transition:transform var(--npt-dur-fast) var(--npt-ease-spring),box-shadow var(--npt-dur-fast) var(--npt-ease-standard),background var(--npt-dur-fast) var(--npt-ease-standard);
@@ -313,7 +318,7 @@ h1,h2,h3,h4{font-family:var(--npt-font-display),system-ui,sans-serif;letter-spac
   -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
   border-radius:var(--npt-corner-lg);padding:18px 20px;
 }
-.stat b{font-family:var(--npt-font-display),sans-serif;font-size:clamp(1.7rem,3vw,2.3rem);font-weight:900;display:block;color:#fff;font-variant-numeric:tabular-nums}
+.stat b{font-family:var(--npt-font-num),sans-serif;font-size:clamp(1.7rem,3vw,2.3rem);font-weight:800;display:block;color:#fff;font-variant-numeric:tabular-nums}
 .stat b .plus{color:var(--npt-brand-coral)}
 .stat span{font-size:13.5px;color:color-mix(in oklab,#fff 66%,transparent);font-weight:600}
 
@@ -461,8 +466,8 @@ a.card:hover .card__go svg{transform:translateX(4px)}
 @media (max-width:520px){.footer-grid{grid-template-columns:1fr}}
 .footer-brand img{block-size:34px;inline-size:auto;margin-block-end:14px}
 .footer-brand p{font-size:14px;color:color-mix(in oklab,#fff 62%,transparent);max-width:34ch}
-.footer-col h4{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:color-mix(in oklab,#fff 55%,transparent);margin-block-end:14px}
-[dir="rtl"] .footer-col h4{letter-spacing:0}
+.footer-col h3{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:color-mix(in oklab,#fff 55%,transparent);margin-block-end:14px}
+[dir="rtl"] .footer-col h3{letter-spacing:0}
 .footer-col ul{display:grid;gap:9px}
 .footer-col a{font-size:14.5px;font-weight:600;color:color-mix(in oklab,#fff 82%,transparent);transition:color var(--npt-dur-fast) var(--npt-ease-standard)}
 .footer-col a:hover{color:var(--npt-brand-coral)}

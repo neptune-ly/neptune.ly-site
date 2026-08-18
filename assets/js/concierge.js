@@ -157,9 +157,10 @@
     /* launcher */
     launcher = el("button", "cx-launch");
     launcher.type = "button";
-    launcher.setAttribute("data-aria-en", "Open the Neptune assistant");
-    launcher.setAttribute("data-aria-ar", "افتح مساعد نبتون");
-    launcher.setAttribute("aria-label", "Open the Neptune assistant");
+    /* The accessible name must CONTAIN the visible label ("Find your fit"). */
+    launcher.setAttribute("data-aria-en", "Find your fit — open the Neptune assistant");
+    launcher.setAttribute("data-aria-ar", "ما الذي يناسبكم؟ — افتح مساعد نبتون");
+    launcher.setAttribute("aria-label", "Find your fit — open the Neptune assistant");
     var av = el("span", "av"); av.innerHTML = ICON_SPARK;
     var lb = el("span", "label");
     lb.appendChild(bi("Find your fit", "ما الذي يناسبكم؟"));
@@ -195,8 +196,14 @@
 
     panel.appendChild(top); panel.appendChild(body); panel.appendChild(foot);
 
-    document.body.appendChild(launcher);
-    document.body.appendChild(panel);
+    /* A landmark of its own, so no page content sits outside landmarks. */
+    var home = el("aside");
+    home.setAttribute("aria-label", "Neptune assistant");
+    home.setAttribute("data-aria-en", "Neptune assistant");
+    home.setAttribute("data-aria-ar", "مساعد نبتون");
+    home.appendChild(launcher);
+    home.appendChild(panel);
+    document.body.appendChild(home);
 
     launcher.addEventListener("click", open);
     closeBtn.addEventListener("click", close);

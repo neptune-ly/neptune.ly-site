@@ -18,21 +18,18 @@
 <link rel="icon" type="image/svg+xml" href="assets/brand/favicon.svg">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
-<link rel="preload" href="assets/fonts/nunito-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/baloo2-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/hanken-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/beiruti-arabic.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="assets/fonts/fonts.css">
 <link rel="stylesheet" href="assets/css/odyssey.css">
-<link rel="stylesheet" href="assets/css/aurora.css">
+<link rel="stylesheet" href="assets/css/tide.css">
 <script src="assets/js/boot.js"></script>
 <script src="assets/js/site.js" defer></script>
-<script src="assets/js/aurora.js" defer></script>
+<script src="assets/js/tide.js" defer></script>
 <script src="assets/js/concierge.js" defer></script>
 </head>
 <body>
-<div class="npt-field" aria-hidden="true"><b></b><b></b><b></b></div>
-<div class="npt-grain" aria-hidden="true"></div>
-<div class="npt-progress" aria-hidden="true"><i></i></div>
-<div class="npt-aura" aria-hidden="true"></div>
 <a class="skip-link" href="#main"><span data-l="en">Skip to content</span><span data-l="ar">تجاوز إلى المحتوى</span></a>
 <header class="site-header">
 <div class="wrap nav">
@@ -44,7 +41,13 @@
   </a>
   <ul class="nav__links"><li><a href="index.html"><span data-l="en">Home</span><span data-l="ar">الرئيسية</span></a></li><li><a href="products.html"><span data-l="en">Products</span><span data-l="ar">المنتجات</span></a></li><li><a href="solutions.html"><span data-l="en">Solutions</span><span data-l="ar">الحلول</span></a></li><li><a href="open-source.html"><span data-l="en">Open Source</span><span data-l="ar">المصدر المفتوح</span></a></li><li><a href="about.html" aria-current="page"><span data-l="en">About</span><span data-l="ar">من نحن</span></a></li><li><a href="contact.html"><span data-l="en">Contact</span><span data-l="ar">تواصل معنا</span></a></li></ul>
   <div class="nav__actions">
-    <button class="icon-btn lang-btn" type="button" data-aria-en="Switch language" data-aria-ar="تغيير اللغة">عربي</button>
+    <div class="lang">
+      <button class="icon-btn lang-btn" type="button" aria-haspopup="true" aria-expanded="false" data-aria-en="Choose language" data-aria-ar="اختر اللغة"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.8 2.6 4 5.7 4 9s-1.2 6.4-4 9c-2.8-2.6-4-5.7-4-9s1.2-6.4 4-9Z"/></svg><span class="lang-btn__cur">EN</span></button>
+      <div class="lang__menu" role="group" aria-label="Language" data-aria-en="Language" data-aria-ar="اللغة">
+        <button type="button" role="menuitemradio" data-lang-pick="en" aria-checked="true">English</button>
+        <button type="button" role="menuitemradio" data-lang-pick="ar" aria-checked="false">العربية</button>
+      </div>
+    </div>
     <button class="icon-btn mode-btn" type="button" data-aria-en="Toggle dark mode" data-aria-ar="تبديل الوضع الداكن"><svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.3M12 19.2v2.3M2.5 12h2.3M19.2 12h2.3M5 5l1.6 1.6M17.4 17.4 19 19M19 5l-1.6 1.6M6.6 17.4 5 19"/></svg><svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11Z"/></svg></button>
     <a class="btn btn--coral btn--sheen nav__cta" href="contact.html#quote"><span data-l="en">Request a quote</span><span data-l="ar">اطلب عرض سعر</span></a>
     <button class="icon-btn nav__burger" type="button" aria-expanded="false" data-aria-en="Menu" data-aria-ar="القائمة"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
@@ -54,7 +57,6 @@
 <main id="main">
 
 <section class="hero hero--page">
-<canvas class="npt-web" aria-hidden="true"></canvas>
 <div class="wrap hero__inner">
   <p class="eyebrow reveal"><span data-l="en">About Neptune</span><span data-l="ar">عن نبتون</span></p>
   <h1 class="display-xl reveal"><span data-l="en">Financial technology, engineered like it matters</span><span data-l="ar">تقنية مالية تُهندَس كما يليق بها</span><span style="color:#EB4E4D">.</span></h1>
@@ -77,7 +79,6 @@
     </div>
     <div class="reveal">
       <div class="navy-panel">
-<canvas class="npt-web" aria-hidden="true"></canvas>
         <p class="eyebrow" style="color:#fff"><span data-l="en">How we work</span><span data-l="ar">كيف نعمل</span></p>
         <ul class="checklist" style="--check:#fff;color:#fff;margin-block-start:16px">
           <li><span data-l="en">Decide and deliver — we bring recommendations, not option lists</span><span data-l="ar">نقرر وننجز — نأتيكم بتوصيات لا بقوائم خيارات</span></li>
@@ -119,7 +120,6 @@
 <section class="section">
 <div class="wrap">
   <div class="navy-panel reveal" style="text-align:center">
-<canvas class="npt-web" aria-hidden="true"></canvas>
     <div style="display:grid;gap:22px;justify-items:center;max-width:640px;margin-inline:auto">
       <p class="eyebrow" style="color:#fff"><span data-l="en">Let's build</span><span data-l="ar">لنبنِ معاً</span></p>
       <h2 class="display-lg" style="color:#fff"><span data-l="en">Have a platform in mind?</span><span data-l="ar">هل لديكم منصة تفكرون فيها؟</span></h2>
@@ -142,11 +142,11 @@
       <p data-l="en">Banking-grade platforms — middleware, mobile banking, onboarding, payments and design systems — engineered in Libya.</p><p data-l="ar">منصات بمستوى مصرفي — طبقة وسيطة وصيرفة عبر الهاتف وفتح حسابات ومدفوعات وأنظمة تصميم — تُهندَس في ليبيا.</p>
     </div>
     <div class="footer-col">
-      <h4><span data-l="en">Products</span><span data-l="ar">المنتجات</span></h4>
+      <h3 class="footer-col__t"><span data-l="en">Products</span><span data-l="ar">المنتجات</span></h3>
       <ul><li><a href="products/neptune-mobile.html">Neptune Mobile</a></li><li><a href="products/nexus.html">Nexus.mw</a></li><li><a href="products/sentinel.html">N-Sentinel</a></li><li><a href="products/polaris.html">Polaris</a></li><li><a href="products/openwave.html">OpenWave</a></li><li><a href="products/astro.html">Neptune Astro</a></li><li><a href="products.html"><span data-l="en">All products</span><span data-l="ar">كل المنتجات</span></a></li></ul>
     </div>
     <div class="footer-col">
-      <h4><span data-l="en">Company</span><span data-l="ar">الشركة</span></h4>
+      <h3 class="footer-col__t"><span data-l="en">Company</span><span data-l="ar">الشركة</span></h3>
       <ul>
         <li><a href="about.html"><span data-l="en">About us</span><span data-l="ar">من نحن</span></a></li>
         <li><a href="solutions.html"><span data-l="en">Solutions & services</span><span data-l="ar">الحلول والخدمات</span></a></li>
@@ -156,7 +156,7 @@
       </ul>
     </div>
     <div class="footer-col">
-      <h4><span data-l="en">Connect</span><span data-l="ar">تواصل</span></h4>
+      <h3 class="footer-col__t"><span data-l="en">Connect</span><span data-l="ar">تواصل</span></h3>
       <ul>
         <li><a href="mailto:info@neptune.ly">info@neptune.ly</a></li>
         <li><a href="tel:+218923666385"><span class="num">+218 92 366 6385</span></a></li>

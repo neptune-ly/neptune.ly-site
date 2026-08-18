@@ -17,13 +17,35 @@
     document.querySelectorAll("[data-aria-en]").forEach(function (el) {
       el.setAttribute("aria-label", el.getAttribute(lang === "ar" ? "data-aria-ar" : "data-aria-en") || "");
     });
-    document.querySelectorAll(".lang-btn").forEach(function (b) {
-      b.textContent = lang === "ar" ? "EN" : "عربي";
+    document.querySelectorAll(".lang-btn__cur").forEach(function (b) {
+      b.textContent = lang === "ar" ? "عربي" : "EN";
+    });
+    document.querySelectorAll("[data-lang-pick]").forEach(function (b) {
+      b.setAttribute("aria-checked", b.getAttribute("data-lang-pick") === lang ? "true" : "false");
     });
   }
-  document.querySelectorAll(".lang-btn").forEach(function (btn) {
+  document.querySelectorAll(".lang").forEach(function (wrap) {
+    var btn = wrap.querySelector(".lang-btn");
+    var close = function () {
+      wrap.classList.remove("open");
+      btn.setAttribute("aria-expanded", "false");
+    };
     btn.addEventListener("click", function () {
-      applyLang(html.getAttribute("lang") === "ar" ? "en" : "ar");
+      var open = wrap.classList.toggle("open");
+      btn.setAttribute("aria-expanded", open ? "true" : "false");
+    });
+    wrap.querySelectorAll("[data-lang-pick]").forEach(function (item) {
+      item.addEventListener("click", function () {
+        applyLang(item.getAttribute("data-lang-pick"));
+        close();
+        btn.focus();
+      });
+    });
+    document.addEventListener("click", function (e) {
+      if (!e.target.closest(".lang")) close();
+    });
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && wrap.classList.contains("open")) { close(); btn.focus(); }
     });
   });
   applyLang(html.getAttribute("lang") === "ar" ? "ar" : "en");
@@ -118,6 +140,18 @@
     });
     var landing = form.querySelector('[name="landing_path"]');
     if (landing) landing.value = window.location.pathname.slice(0, 240);
+    // Concierge handoff: the assistant links here with ?need= and ?msg=.
+    // Its need values are broader than the topic list, so map before selecting.
+    var needToTopic = { mobile: "mobile", middleware: "middleware", ekyc: "onboarding",
+                        aml: "aml", pos: "pos", wallet: "payments", custom: "other" };
+    var need = needToTopic[query.get("need")];
+    var topicSel = form.querySelector('[name="topic"]');
+    if (need && topicSel && topicSel.querySelector('option[value="' + need + '"]')) {
+      topicSel.value = need;
+    }
+    var seed = query.get("msg");
+    var msgField = form.querySelector('[name="message"]');
+    if (seed && msgField && !msgField.value) msgField.value = seed.slice(0, 1000);
     var started = Date.now();
     form.addEventListener("submit", function (e) {
       e.preventDefault();
