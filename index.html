@@ -79,27 +79,47 @@
   
 <div class="stage reveal" data-brand="neptune">
   <div class="stage__chips"><button class="stage__chip is-on" type="button" data-brand-pick="neptune">Neptune</button><button class="stage__chip" type="button" data-brand-pick="triton">Triton</button><button class="stage__chip" type="button" data-brand-pick="nereid">Nereid</button><button class="stage__chip" type="button" data-brand-pick="proteus">Proteus</button></div>
-  <div class="device" aria-hidden="true">
-    <div class="device__screen">
+  <div class="device">
+    <div class="device__screen" data-screen="home">
       <div class="dv-top">
         <span class="dv-hello"><span data-l="en">Good morning</span><span data-l="ar">صباح الخير</span><b class="dv-bank">Neptune<span class="dv-dot">·</span></b></span>
         <span class="dv-avatar"></span>
       </div>
-      <div class="dv-balance">
-        <span class="dv-eyebrow"><span data-l="en">Total balance</span><span data-l="ar">الرصيد الإجمالي</span></span>
-        <b class="num dv-amount">24,806.50 <i><span data-l="en">LYD</span><span data-l="ar">د.ل</span></i></b>
-        <span class="dv-trend num">+1,240.00 <span data-l="en">this week</span><span data-l="ar">هذا الأسبوع</span></span>
+      <div class="device__panes">
+        <div class="dv-pane dv-pane--home">
+          <div class="dv-balance">
+            <span class="dv-eyebrow"><span data-l="en">Total balance</span><span data-l="ar">الرصيد الإجمالي</span></span>
+            <b class="num dv-amount">24,806.50 <i><span data-l="en">LYD</span><span data-l="ar">د.ل</span></i></b>
+            <span class="dv-trend num">+1,240.00 <span data-l="en">this week</span><span data-l="ar">هذا الأسبوع</span></span>
+          </div>
+          <div class="dv-acts"><span class="dv-act"><i aria-hidden="true"></i><span data-l="en">Send</span><span data-l="ar">إرسال</span></span><span class="dv-act"><i aria-hidden="true"></i><span data-l="en">Top up</span><span data-l="ar">تعبئة</span></span><span class="dv-act"><i aria-hidden="true"></i><span data-l="en">Pay</span><span data-l="ar">دفع</span></span><span class="dv-act"><i aria-hidden="true"></i><span data-l="en">Cards</span><span data-l="ar">بطاقات</span></span></div>
+          <div class="dv-list"><div class="dv-row"><span class="dv-row__ic dv-row__ic--out" aria-hidden="true"></span><span class="dv-row__meta"><span data-l="en">Utility payment</span><span data-l="ar">فاتورة خدمات</span><i><span data-l="en">Today 09:12</span><span data-l="ar">اليوم 09:12</span></i></span><b class="num dv-row__amt">−86.00</b></div><div class="dv-row"><span class="dv-row__ic dv-row__ic--in" aria-hidden="true"></span><span class="dv-row__meta"><span data-l="en">Salary</span><span data-l="ar">الراتب</span><i><span data-l="en">Yesterday</span><span data-l="ar">أمس</span></i></span><b class="num dv-row__amt dv-row__amt--in">+2,300.00</b></div></div>
+          <div class="dv-insight">
+            <span class="dv-insight__t"><span data-l="en">Spending this month</span><span data-l="ar">إنفاق هذا الشهر</span><b class="num">1,982.00</b></span>
+            <span class="dv-insight__bars"><i style="--h:34%"></i><i style="--h:58%"></i><i style="--h:42%"></i><i style="--h:76%"></i><i style="--h:50%"></i><i style="--h:88%"></i><i class="now" style="--h:64%"></i></span>
+          </div>
+        </div>
+        <div class="dv-pane dv-pane--cards">
+          <div class="dv-card">
+            <span class="dv-card__top"><i class="dv-card__chip"></i><b class="dv-card__brand">Neptune<span class="dv-dot">·</span></b></span>
+            <b class="num dv-card__pan">•••• •••• •••• 4821</b>
+            <span class="dv-card__row"><i>AMAL BEN MUSA</i><i class="num">12/28</i></span>
+          </div>
+          <div class="dv-row"><span class="dv-row__meta"><span data-l="en">Freeze card</span><span data-l="ar">تجميد البطاقة</span><i><span data-l="en">Instant, reversible</span><span data-l="ar">فوري وقابل للتراجع</span></i></span><span class="dv-tog" aria-hidden="true"></span></div>
+          <div class="dv-row"><span class="dv-row__meta"><span data-l="en">Monthly limit</span><span data-l="ar">الحد الشهري</span><i><span data-l="en">Online & POS</span><span data-l="ar">إنترنت ونقاط بيع</span></i></span><b class="num dv-row__amt">3,000.00</b></div>
+        </div>
+        <div class="dv-pane dv-pane--pay">
+          <span class="dv-eyebrow dv-eyebrow--ink"><span data-l="en">Send money</span><span data-l="ar">إرسال أموال</span></span>
+          <b class="num dv-amount dv-amount--pay">250.00 <i><span data-l="en">LYD</span><span data-l="ar">د.ل</span></i></b>
+          <div class="dv-row"><span class="dv-row__ic dv-row__ic--out" aria-hidden="true"></span><span class="dv-row__meta"><span data-l="en">To: Amal Ben Musa</span><span data-l="ar">إلى: أمل بن موسى</span><i><span data-l="en">Neptune · instant</span><span data-l="ar">نبتون · فوري</span></i></span></div>
+          <div class="dv-pad" aria-hidden="true"><i class="num">1</i><i class="num">2</i><i class="num">3</i><i class="num">4</i><i class="num">5</i><i class="num">6</i><i class="num">7</i><i class="num">8</i><i class="num">9</i><i class="num">·</i><i class="num">0</i><i class="num">⌫</i></div>
+          <span class="dv-cta"><span data-l="en">Confirm transfer</span><span data-l="ar">تأكيد التحويل</span></span>
+        </div>
       </div>
-      <div class="dv-acts"><span class="dv-act"><i aria-hidden="true"></i><span data-l="en">Send</span><span data-l="ar">إرسال</span></span><span class="dv-act"><i aria-hidden="true"></i><span data-l="en">Top up</span><span data-l="ar">تعبئة</span></span><span class="dv-act"><i aria-hidden="true"></i><span data-l="en">Pay</span><span data-l="ar">دفع</span></span><span class="dv-act"><i aria-hidden="true"></i><span data-l="en">Cards</span><span data-l="ar">بطاقات</span></span></div>
-      <div class="dv-list"><div class="dv-row"><span class="dv-row__ic dv-row__ic--out" aria-hidden="true"></span><span class="dv-row__meta"><span data-l="en">Utility payment</span><span data-l="ar">فاتورة خدمات</span><i><span data-l="en">Today 09:12</span><span data-l="ar">اليوم 09:12</span></i></span><b class="num dv-row__amt">−86.00</b></div><div class="dv-row"><span class="dv-row__ic dv-row__ic--in" aria-hidden="true"></span><span class="dv-row__meta"><span data-l="en">Salary</span><span data-l="ar">الراتب</span><i><span data-l="en">Yesterday</span><span data-l="ar">أمس</span></i></span><b class="num dv-row__amt dv-row__amt--in">+2,300.00</b></div></div>
-      <div class="dv-insight">
-        <span class="dv-insight__t"><span data-l="en">Spending this month</span><span data-l="ar">إنفاق هذا الشهر</span><b class="num">1,982.00</b></span>
-        <span class="dv-insight__bars"><i style="--h:34%"></i><i style="--h:58%"></i><i style="--h:42%"></i><i style="--h:76%"></i><i style="--h:50%"></i><i style="--h:88%"></i><i class="now" style="--h:64%"></i></span>
-      </div>
-      <div class="dv-dock"><i></i><i></i><i class="on"></i><i></i><i></i></div>
+      <div class="dv-dock dv-dock--tabs"><button class="dv-tab on" type="button" data-dv-screen="home"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11.5 12 4l8 7.5"/><path d="M6.5 10.5V20h11v-9.5"/></svg></span><span data-l="en">Home</span><span data-l="ar">الرئيسية</span></button><button class="dv-tab" type="button" data-dv-screen="cards"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="18" height="13" rx="2.5"/><path d="M3 10.5h18"/></svg></span><span data-l="en">Cards</span><span data-l="ar">البطاقات</span></button><button class="dv-tab" type="button" data-dv-screen="pay"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V6"/><path d="m6.5 11 5.5-5.5L17.5 11"/></svg></span><span data-l="en">Pay</span><span data-l="ar">دفع</span></button></div>
     </div>
   </div>
-  <p class="stage__note" data-l="en">One codebase, re-skinned live: colour scheme, corner family, type, motif and motion all come from a portable Odyssey brandprint. Our client banks ship production apps made exactly this way.</p><p class="stage__note" data-l="ar">قاعدة برمجية واحدة تُعاد كسوتها أمامكم: نظام الألوان وعائلة الزوايا والخط والزخرفة والحركة كلها من بصمة علامة Odyssey قابلة للنقل. مصارفنا العميلة تطلق تطبيقاتها الفعلية بهذه الطريقة تماماً.</p>
+  <p class="stage__note" data-l="en">One codebase, re-skinned live: colour scheme, corner family, type, motif and motion all come from a portable Odyssey brandprint. Tap Home, Cards and Pay — every template re-skins. Our client banks ship production apps made exactly this way.</p><p class="stage__note" data-l="ar">قاعدة برمجية واحدة تُعاد كسوتها أمامكم: نظام الألوان وعائلة الزوايا والخط والزخرفة والحركة كلها من بصمة علامة Odyssey قابلة للنقل. اضغطوا الرئيسية والبطاقات والدفع — كل قالب يُعاد كساؤه. مصارفنا العميلة تطلق تطبيقاتها الفعلية بهذه الطريقة تماماً.</p>
 </div>
   <div class="stats reveal-stagger">
     <div class="stat"><b><span data-count="9">0</span></b><span><span data-l="en">Products in the Neptune universe</span><span data-l="ar">منتجاً في عالم نبتون</span></span></div>
@@ -371,6 +391,34 @@
       <div class="loc-card__r"><span>Référence</span><b class="num">NPT-58291</b></div>
       <span class="loc-card__b">Partager le reçu</span>
     </div>
+    <div class="loc-card" lang="es" dir="ltr">
+      <b class="loc-card__t">Transferencia confirmada</b>
+      <div class="loc-card__r"><span>Para</span><b>Amal Ben Musa</b></div>
+      <div class="loc-card__r"><span>Importe</span><b class="num">1.250,00 LYD</b></div>
+      <div class="loc-card__r"><span>Referencia</span><b class="num">NPT-58291</b></div>
+      <span class="loc-card__b">Compartir recibo</span>
+    </div>
+    <div class="loc-card" lang="it" dir="ltr">
+      <b class="loc-card__t">Bonifico confermato</b>
+      <div class="loc-card__r"><span>A</span><b>Amal Ben Musa</b></div>
+      <div class="loc-card__r"><span>Importo</span><b class="num">1.250,00 LYD</b></div>
+      <div class="loc-card__r"><span>Riferimento</span><b class="num">NPT-58291</b></div>
+      <span class="loc-card__b">Condividi ricevuta</span>
+    </div>
+    <div class="loc-card" lang="de" dir="ltr">
+      <b class="loc-card__t">Überweisung bestätigt</b>
+      <div class="loc-card__r"><span>An</span><b>Amal Ben Musa</b></div>
+      <div class="loc-card__r"><span>Betrag</span><b class="num">1.250,00 LYD</b></div>
+      <div class="loc-card__r"><span>Referenz</span><b class="num">NPT-58291</b></div>
+      <span class="loc-card__b">Beleg teilen</span>
+    </div>
+    <div class="loc-card" lang="nl" dir="ltr">
+      <b class="loc-card__t">Overboeking bevestigd</b>
+      <div class="loc-card__r"><span>Aan</span><b>Amal Ben Musa</b></div>
+      <div class="loc-card__r"><span>Bedrag</span><b class="num">1.250,00 LYD</b></div>
+      <div class="loc-card__r"><span>Referentie</span><b class="num">NPT-58291</b></div>
+      <span class="loc-card__b">Bon delen</span>
+    </div>
     <div class="loc-card" lang="pt" dir="ltr">
       <b class="loc-card__t">Transferência confirmada</b>
       <div class="loc-card__r"><span>Para</span><b>Amal Ben Musa</b></div>
@@ -378,21 +426,28 @@
       <div class="loc-card__r"><span>Referência</span><b class="num">NPT-58291</b></div>
       <span class="loc-card__b">Partilhar recibo</span>
     </div>
-    <div class="loc-card" lang="sw" dir="ltr">
-      <b class="loc-card__t">Muamala umekamilika</b>
-      <div class="loc-card__r"><span>Kwa</span><b>Amal Ben Musa</b></div>
-      <div class="loc-card__r"><span>Kiasi</span><b class="num">1,250.00 LYD</b></div>
-      <div class="loc-card__r"><span>Kumbukumbu</span><b class="num">NPT-58291</b></div>
-      <span class="loc-card__b">Shiriki risiti</span>
-    </div>
     <div class="loc-card" lang="uk" dir="ltr">
       <b class="loc-card__t">Переказ підтверджено</b>
       <div class="loc-card__r"><span>Отримувач</span><b>Amal Ben Musa</b></div>
       <div class="loc-card__r"><span>Сума</span><b class="num">1 250,00 LYD</b></div>
       <div class="loc-card__r"><span>Референс</span><b class="num">NPT-58291</b></div>
       <span class="loc-card__b">Поділитися квитанцією</span>
+    </div>
+    <div class="loc-card" lang="sw" dir="ltr">
+      <b class="loc-card__t">Muamala umekamilika<span class="loc-card__tag">Target</span></b>
+      <div class="loc-card__r"><span>Kwa</span><b>Amal Ben Musa</b></div>
+      <div class="loc-card__r"><span>Kiasi</span><b class="num">1,250.00 LYD</b></div>
+      <div class="loc-card__r"><span>Kumbukumbu</span><b class="num">NPT-58291</b></div>
+      <span class="loc-card__b">Shiriki risiti</span>
+    </div>
+    <div class="loc-card" lang="ha" dir="ltr">
+      <b class="loc-card__t">An tabbatar da tura kuɗi<span class="loc-card__tag">Target</span></b>
+      <div class="loc-card__r"><span>Zuwa</span><b>Amal Ben Musa</b></div>
+      <div class="loc-card__r"><span>Adadi</span><b class="num">1,250.00 LYD</b></div>
+      <div class="loc-card__r"><span>Lamba</span><b class="num">NPT-58291</b></div>
+      <span class="loc-card__b">Raba rasit</span>
     </div></div>
-  <div class="loc__dots" aria-hidden="true"><i data-loc-dot="0" class="on"></i><i data-loc-dot="1"></i><i data-loc-dot="2"></i><i data-loc-dot="3"></i><i data-loc-dot="4"></i><i data-loc-dot="5"></i></div>
+  <div class="loc__dots" aria-hidden="true"><i data-loc-dot="0" class="on"></i><i data-loc-dot="1"></i><i data-loc-dot="2"></i><i data-loc-dot="3"></i><i data-loc-dot="4"></i><i data-loc-dot="5"></i><i data-loc-dot="6"></i><i data-loc-dot="7"></i><i data-loc-dot="8"></i><i data-loc-dot="9"></i><i data-loc-dot="10"></i></div>
 </div>
   </div>
 </div>

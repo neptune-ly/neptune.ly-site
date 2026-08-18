@@ -232,18 +232,82 @@
   transition:background var(--dv-dur) var(--dv-ease);
 }
 .dv-insight__bars i.now{background:var(--dv-primary)}
+/* --- screen templates: Home / Cards / Pay --- */
+.device__panes{position:relative;flex:1;min-block-size:0}
+.dv-pane{
+  position:absolute;inset:0;display:flex;flex-direction:column;gap:10px;
+  opacity:0;transform:translateY(10px);pointer-events:none;
+  transition:opacity var(--dv-dur) var(--dv-ease),transform var(--dv-dur) var(--dv-ease);
+}
+[data-screen="home"] .dv-pane--home,
+[data-screen="cards"] .dv-pane--cards,
+[data-screen="pay"] .dv-pane--pay{opacity:1;transform:none;pointer-events:auto}
+
+/* card art — brightness-INVARIANT like every physical-object surface */
+.dv-card{
+  aspect-ratio:1.6;border-radius:var(--dv-r-lg);padding:15px 16px;
+  display:grid;align-content:space-between;color:var(--dv-on-card);
+  background-image:var(--dv-motif),linear-gradient(135deg,var(--dv-grad-a),var(--dv-grad-b));
+  background-size:var(--dv-motif-size,auto),auto;
+  box-shadow:0 14px 30px -14px color-mix(in oklab,var(--dv-grad-a) 60%,transparent);
+  transition:border-radius var(--dv-dur) var(--dv-ease),background var(--dv-dur) var(--dv-ease);
+}
+.dv-card__top{display:flex;justify-content:space-between;align-items:center}
+.dv-card__chip{inline-size:30px;block-size:21px;border-radius:5px;display:block;
+  background:linear-gradient(140deg,#F0CE9D,#D9AE6E);
+  box-shadow:inset 0 0 0 1px color-mix(in oklab,#000 22%,transparent)}
+.dv-card__brand{font-size:13px;font-weight:700;font-family:var(--dv-font),sans-serif}
+.dv-card__pan{font-size:14.5px;font-weight:600;letter-spacing:.09em;font-variant-numeric:tabular-nums}
+[dir="rtl"] .dv-card__pan{letter-spacing:.09em;direction:ltr;text-align:end}
+.dv-card__row{display:flex;justify-content:space-between;font-size:9.5px;font-weight:600;
+  letter-spacing:.08em;text-transform:uppercase;opacity:.9}
+.dv-card__row i{font-style:normal}
+.dv-tog{inline-size:36px;block-size:21px;flex:none;border-radius:999px;position:relative;
+  background:var(--dv-primary);transition:background var(--dv-dur) var(--dv-ease)}
+.dv-tog::after{content:"";position:absolute;inset-block-start:2.5px;inset-inline-end:2.5px;
+  inline-size:16px;block-size:16px;border-radius:50%;background:#fff}
+.dv-eyebrow--ink{font-size:10px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;
+  color:var(--dv-osv)}
+[dir="rtl"] .dv-eyebrow--ink{letter-spacing:0}
+.dv-amount--pay{font-size:27px;color:var(--dv-on-surface)}
+.dv-pad{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.dv-pad i{
+  display:grid;place-items:center;block-size:31px;font-style:normal;
+  font-size:13px;font-weight:600;font-variant-numeric:tabular-nums;
+  border-radius:var(--dv-r-sm);background:var(--dv-container);border:1px solid var(--dv-ov);
+  color:var(--dv-on-surface);
+  transition:border-radius var(--dv-dur) var(--dv-ease),background var(--dv-dur) var(--dv-ease);
+}
+.dv-cta{
+  margin-block-start:auto;text-align:center;padding:11px 14px;
+  border-radius:var(--dv-r-md);font-size:13px;font-weight:700;
+  background:var(--dv-primary);color:var(--dv-on-primary);
+  transition:border-radius var(--dv-dur) var(--dv-ease),background var(--dv-dur) var(--dv-ease);
+}
+
+/* --- the dock: a real navbar; active tab rides the brand spring --- */
 .dv-dock{
-  margin-block-start:auto;display:flex;justify-content:space-around;align-items:center;
-  padding:9px 12px;border-radius:var(--npt-corner-full);
+  margin-block-start:auto;display:flex;justify-content:space-around;align-items:end;
+  padding:6px 10px 7px;border-radius:var(--npt-corner-full);
   background:color-mix(in oklab,var(--dv-container) 86%,transparent);
   border:1px solid var(--dv-ov);
 }
-.dv-dock i{inline-size:7px;block-size:7px;border-radius:50%;background:var(--dv-osv);opacity:.5;
-  transition:all var(--dv-dur) var(--dv-spring)}
-.dv-dock i.on{
-  inline-size:12px;block-size:12px;opacity:1;background:var(--dv-primary);
-  transform:translateY(-7px);
-  box-shadow:0 6px 14px color-mix(in oklab,var(--dv-primary) 55%,transparent);
+.dv-tab{
+  display:grid;gap:2px;justify-items:center;padding:2px 12px;
+  font-size:9.5px;font-weight:600;color:var(--dv-osv);
+  font-family:var(--dv-font),var(--npt-font-text),sans-serif;
+}
+[dir="rtl"] .dv-tab{font-family:'Beiruti',sans-serif}
+.dv-tab .ic{
+  inline-size:32px;block-size:32px;border-radius:50%;display:grid;place-items:center;
+  transition:background var(--dv-dur) var(--dv-spring),color var(--dv-dur) var(--dv-ease),
+             transform var(--dv-dur) var(--dv-spring),box-shadow var(--dv-dur) var(--dv-ease);
+}
+.dv-tab .ic svg{inline-size:17px;block-size:17px}
+.dv-tab.on{color:var(--dv-on-surface);font-weight:700}
+.dv-tab.on .ic{
+  background:var(--dv-primary);color:var(--dv-on-primary);transform:translateY(-10px);
+  box-shadow:0 8px 16px color-mix(in oklab,var(--dv-primary) 50%,transparent);
 }
 
 /* ============================================================================
@@ -507,6 +571,9 @@
 .loc-card[lang="ar"]{font-family:'Beiruti',sans-serif}
 .loc-card[lang="uk"]{font-family:system-ui,-apple-system,'Segoe UI',sans-serif}
 .loc-card__t{font-size:18px;font-weight:800;display:flex;align-items:center;gap:10px}
+.loc-card__tag{font-size:10px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;
+  padding:2px 8px;border-radius:var(--npt-corner-full);
+  background:var(--md-sys-color-tertiary-container);color:var(--md-sys-color-on-tertiary-container)}
 .loc-card__t::before{content:"";inline-size:22px;block-size:22px;flex:none;border-radius:50%;
   background:color-mix(in oklab,var(--md-sys-color-success) 22%,transparent) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232e7d4f' stroke-width='3.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 13l4 4L19 7'/%3E%3C/svg%3E") center/12px no-repeat}
 .loc-card__r{display:flex;justify-content:space-between;gap:16px;font-size:14px;

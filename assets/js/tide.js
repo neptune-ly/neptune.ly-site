@@ -10,21 +10,33 @@
   if (stage) {
     var chips = stage.querySelectorAll("[data-brand-pick]");
     var banks = { neptune: "Neptune", triton: "Triton", nereid: "Nereid", proteus: "Proteus" };
-    var bank = stage.querySelector(".dv-bank");
+    var setBankName = function (name) {
+      stage.querySelectorAll(".dv-bank, .dv-card__brand").forEach(function (el) {
+        el.textContent = "";
+        el.appendChild(document.createTextNode(name));
+        var dot = document.createElement("span");
+        dot.className = "dv-dot";
+        dot.textContent = "·";
+        el.appendChild(dot);
+      });
+    };
     chips.forEach(function (chip) {
       chip.addEventListener("click", function () {
         var brand = chip.getAttribute("data-brand-pick");
         if (stage.getAttribute("data-brand") === brand) return;
         stage.setAttribute("data-brand", brand);
         chips.forEach(function (c) { c.classList.toggle("is-on", c === chip); });
-        if (bank) {
-          bank.textContent = "";
-          bank.appendChild(document.createTextNode(banks[brand] || brand));
-          var dot = document.createElement("span");
-          dot.className = "dv-dot";
-          dot.textContent = "·";
-          bank.appendChild(dot);
-        }
+        setBankName(banks[brand] || brand);
+      });
+    });
+
+    /* the device's real navbar: tabs switch screen templates */
+    var screen = stage.querySelector(".device__screen");
+    var tabs = stage.querySelectorAll("[data-dv-screen]");
+    tabs.forEach(function (tab) {
+      tab.addEventListener("click", function () {
+        screen.setAttribute("data-screen", tab.getAttribute("data-dv-screen"));
+        tabs.forEach(function (t) { t.classList.toggle("on", t === tab); });
       });
     });
   }
