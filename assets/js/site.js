@@ -17,8 +17,9 @@
     document.querySelectorAll("[data-aria-en]").forEach(function (el) {
       el.setAttribute("aria-label", el.getAttribute(lang === "ar" ? "data-aria-ar" : "data-aria-en") || "");
     });
+    var SHORT = { en: "EN", ar: "عربي", fr: "FR", es: "ES", it: "IT", de: "DE", nl: "NL", pt: "PT", uk: "UK", sw: "SW", ha: "HA" };
     document.querySelectorAll(".lang-btn__cur").forEach(function (b) {
-      b.textContent = lang === "ar" ? "عربي" : "EN";
+      b.textContent = SHORT[lang] || lang.toUpperCase();
     });
     document.querySelectorAll("[data-lang-pick]").forEach(function (b) {
       b.setAttribute("aria-checked", b.getAttribute("data-lang-pick") === lang ? "true" : "false");
@@ -48,7 +49,10 @@
       if (e.key === "Escape" && wrap.classList.contains("open")) { close(); btn.focus(); }
     });
   });
-  applyLang(html.getAttribute("lang") === "ar" ? "ar" : "en");
+  // boot.js already set html[lang] correctly (localStorage/URL/navigator) —
+  // re-apply that same value rather than collapsing to en/ar, so the language
+  // dropdown state, aria labels and title track whatever boot.js resolved.
+  applyLang(html.getAttribute("lang") || "en");
 
   /* ---------- theme toggle ---------- */
   document.querySelectorAll(".mode-btn").forEach(function (btn) {

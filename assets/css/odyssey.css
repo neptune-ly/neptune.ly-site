@@ -160,6 +160,15 @@ main{flex:1}
 /* language visibility — html[lang] drives which strings show */
 [lang="en"] [data-l]:not([data-l~="en"]){display:none!important}
 [lang="ar"] [data-l]:not([data-l~="ar"]){display:none!important}
+[lang="fr"] [data-l]:not([data-l~="fr"]){display:none!important}
+[lang="es"] [data-l]:not([data-l~="es"]){display:none!important}
+[lang="it"] [data-l]:not([data-l~="it"]){display:none!important}
+[lang="de"] [data-l]:not([data-l~="de"]){display:none!important}
+[lang="nl"] [data-l]:not([data-l~="nl"]){display:none!important}
+[lang="pt"] [data-l]:not([data-l~="pt"]){display:none!important}
+[lang="uk"] [data-l]:not([data-l~="uk"]){display:none!important}
+[lang="sw"] [data-l]:not([data-l~="sw"]){display:none!important}
+[lang="ha"] [data-l]:not([data-l~="ha"]){display:none!important}
 
 .wrap{width:min(1180px,100% - 48px);margin-inline:auto}
 @media (max-width:640px){.wrap{width:calc(100% - 36px)}}
@@ -197,9 +206,11 @@ h1,h2,h3,h4{font-family:var(--npt-font-display),system-ui,sans-serif;letter-spac
 .only-dark{display:none}
 [data-mode="dark"] .only-dark{display:block}
 [data-mode="dark"] .only-light{display:none}
-/* language-driven logo swap (composes with only-light/only-dark) */
-[lang="ar"] .only-en{display:none!important}
-[lang="en"] .only-ar{display:none!important}
+/* language-driven logo swap (composes with only-light/only-dark).
+   Arabic word-mark only for ar; every other shipped language (all Latin or
+   Cyrillic script) uses the Latin word-mark, same as English. */
+html[lang="ar"] .only-en{display:none!important}
+html:not([lang="ar"]) .only-ar{display:none!important}
 .nav{display:flex;align-items:center;gap:26px;min-height:var(--npt-header-h)}
 .nav__logo{flex:none;display:flex;align-items:center}
 .nav__logo img{block-size:30px;inline-size:auto}
