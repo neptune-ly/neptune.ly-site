@@ -75,6 +75,11 @@ $org   = clean('organization', 160);
 $email = clean('email', 160);
 $phone = clean('phone', 40);
 $topic = clean('topic', 40);
+$utmSource = clean('utm_source', 160);
+$utmMedium = clean('utm_medium', 160);
+$utmCampaign = clean('utm_campaign', 160);
+$utmContent = clean('utm_content', 160);
+$landingPath = clean('landing_path', 240);
 $msg   = trim((string) ($_POST['message'] ?? ''));
 $msg   = str_replace("\0", '', $msg);
 if (function_exists('mb_substr')) {
@@ -101,6 +106,11 @@ $bodyLines = [
     "Email:         {$email}",
     "Phone:         {$phone}",
     "Topic:         {$topic}",
+    "UTM source:    {$utmSource}",
+    "UTM medium:    {$utmMedium}",
+    "UTM campaign:  {$utmCampaign}",
+    "UTM content:   {$utmContent}",
+    "Landing path:  {$landingPath}",
     "IP:            {$ip}",
     "Time (UTC):    " . gmdate('Y-m-d H:i:s'),
     str_repeat('-', 46),

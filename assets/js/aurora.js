@@ -481,24 +481,41 @@
      The concierge and the product pages both deep-link into the quote form
      with ?need=…&org=…  — honouring that is what turns a click into a lead.
      ====================================================================== */
+  // The concierge speaks in needs; the form speaks in topics, and its <select>
+  // accepts only these eight values. Anything unmapped falls through to
+  // "other" rather than silently leaving the topic blank.
+  var TOPIC_FOR_NEED = {
+    mobile: "mobile",
+    wallet: "payments",
+    middleware: "middleware",
+    ekyc: "onboarding",
+    aml: "aml",
+    pos: "pos",
+    custom: "other"
+  };
+
   function bootPrefill() {
     var form = document.getElementById("contact-form");
     if (!form) return;
     var q = new URLSearchParams(location.search);
-    var map = { need: "interest", org: "company", msg: "message", name: "name", email: "email" };
+    var map = { need: "topic", org: "organization", msg: "message", name: "name", email: "email" };
+
     Object.keys(map).forEach(function (key) {
       var v = q.get(key);
       if (!v) return;
       var field = form.elements[map[key]];
       if (!field) return;
+
+      if (key === "need") v = TOPIC_FOR_NEED[v] || "other";
+
       if (field.tagName === "SELECT") {
-        var opts = Array.prototype.slice.call(field.options);
-        var hit = opts.filter(function (o) { return o.value === v; })[0];
-        if (hit) field.value = v;
-      } else {
-        field.value = v;
+        var hit = Array.prototype.slice.call(field.options).filter(function (o) {
+          return o.value === v;
+        })[0];
+        if (!hit) return;
       }
-      var wrap = field.closest(".field");
+      field.value = v;
+      var wrap = field.closest ? field.closest(".field") : null;
       if (wrap) wrap.classList.add("prefilled");
     });
   }

@@ -106,6 +106,18 @@
   /* ---------- contact / quote form ---------- */
   var form = document.getElementById("contact-form");
   if (form) {
+    // Persist first-touch attribution for the full session; explicit URL
+    // values always win so campaign links remain auditable.
+    var attributionKeys = ["utm_source", "utm_medium", "utm_campaign", "utm_content"];
+    var query = new URLSearchParams(window.location.search);
+    attributionKeys.forEach(function (key) {
+      var fromUrl = query.get(key);
+      if (fromUrl) sessionStorage.setItem("neptune_" + key, fromUrl.slice(0, 160));
+      var field = form.querySelector('[name="' + key + '"]');
+      if (field) field.value = fromUrl || sessionStorage.getItem("neptune_" + key) || "";
+    });
+    var landing = form.querySelector('[name="landing_path"]');
+    if (landing) landing.value = window.location.pathname.slice(0, 240);
     var started = Date.now();
     form.addEventListener("submit", function (e) {
       e.preventDefault();
