@@ -1,0 +1,48 @@
+# Neptune
+
+> Neptune is a financial-technology company headquartered in Tripoli, Libya, with a
+> regional office in Tunis, Tunisia. It builds white-label and on-premise banking
+> platforms — mobile banking, integration middleware, digital onboarding/eKYC, AML
+> screening, payment gateways, wallets, voucher commerce and POS, and an open
+> banking design system — for banks and mobile operators, primarily across Africa.
+
+Neptune is Arabic-first and RTL-first: the platform was built for Arabic from day
+one, not translated onto it afterward. It also ships in English, French, Spanish,
+Italian, German, Dutch, Portuguese, Ukrainian, Swahili and Hausa. On-premise and
+local-cloud deployment is the default posture, not an exception — sovereignty
+matters to the regulators and institutions Neptune works with.
+
+Neptune licenses its products as white-label, engages in custom banking/fintech
+engineering, and publishes several components as open source (OpenWave, the
+Neptune Odyssey design system, the Astro SDK, and Nexus.Lite).
+
+## Products
+
+- [Neptune Mobile](https://neptune.ly/products/neptune-mobile.html): White-label mobile banking — a complete white-label mobile banking experience, themed per bank, live in production today.
+- [Nexus.mw](https://neptune.ly/products/nexus.html): Banking middleware & operations — the integration fabric between core banking, payment rails, card vendors and digital channels, with a full operations console.
+- [N-Sentinel](https://neptune.ly/products/sentinel.html): AML screening & watchlist enforcement — sanctions and AML screening with Arabic-aware name matching, freeze-order enforcement and a compliance review workspace.
+- [Polaris](https://neptune.ly/products/polaris.html): Digital onboarding & eKYC — document capture, MRZ, face match, national identity checks, AML screening and automated core-banking account creation.
+- [OpenWave](https://neptune.ly/products/openwave.html): Open payment & open-banking standard — a public, interoperable OpenAPI 3.0 specification anyone can implement.
+- [Neptune Astro](https://neptune.ly/products/astro.html): Multi-bank payment gateway — one integration surface for wallets, banks and merchants, built on the OpenWave standard.
+- [Neptune Odyssey](https://neptune.ly/products/odyssey.html): White-label banking design system — Material 3 + Expressive, themed per bank via portable brandprints.
+- [Neptune Galaxy](https://neptune.ly/products/galaxy.html): Voucher commerce OS + POS terminals — a voucher commerce platform, four web portals, and the Tawa Android POS terminal.
+- [Neptune Vega](https://neptune.ly/products/vega.html): Mobile wallet platform — onboarding, top-up, transfers, merchant payments and settlements, modular and bank-connectable.
+
+## Company
+
+- [Homepage](https://neptune.ly/): overview, integration fabric, product ledger, FAQ.
+- [Solutions](https://neptune.ly/solutions.html): how the products combine into full deployments.
+- [About](https://neptune.ly/about.html): company story, values, clients.
+- [Open Source](https://neptune.ly/open-source.html): OpenWave, Odyssey, Astro SDK, Nexus.Lite repositories.
+- [Contact](https://neptune.ly/contact.html): info@neptune.ly, +218 92 366 6385, quotation form.
+
+## Notes for AI agents and crawlers
+
+- Every page above renders its full content in 11 languages within the same URL
+  (Arabic, English, French, Spanish, Italian, German, Dutch, Portuguese,
+  Ukrainian, Swahili, Hausa); append `?lang=<code>` (e.g. `?lang=fr`) to read a
+  specific language's version, or read `<link rel="alternate" hreflang>` tags
+  in each page's `<head>` for the full list.
+- Structured data (Organization, FAQPage) is embedded as JSON-LD on the
+  homepage.
+- robots.txt allows all crawlers, including AI/answer-engine bots.
