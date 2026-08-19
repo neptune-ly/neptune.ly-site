@@ -602,6 +602,19 @@
 .af-city .ring{fill:none;stroke:var(--npt-brand-coral);stroke-width:1.6;
   animation:af-ring 3s var(--npt-ease-standard) infinite;transform-origin:center;transform-box:fill-box}
 @keyframes af-ring{0%{transform:scale(1);opacity:.9}70%,100%{transform:scale(2.6);opacity:0}}
+/* sonar sweep — Neptune's own signature motif, radiating from Tripoli across
+   the continent. Same doctrine as the hero rings: slow (7.8s), ambient,
+   reduced-motion freezes it to a single still ring rather than removing the
+   brand mark entirely. */
+.af-sweep{
+  fill:none;stroke:var(--npt-brand-sky);stroke-width:1.1;opacity:0;
+  transform-origin:center;transform-box:fill-box;
+  animation:af-sweep 7.8s var(--npt-ease-standard) infinite;
+}
+@keyframes af-sweep{
+  0%{transform:scale(1);opacity:.55}
+  85%,100%{transform:scale(24);opacity:0}
+}
 .af-city text{font-family:var(--npt-font-text),sans-serif;font-size:13px;font-weight:700;
   fill:var(--md-sys-color-on-surface)}
 
@@ -819,8 +832,9 @@ body.cx-open .cx-launch{opacity:0;pointer-events:none;transform:scale(.9)}
    guards — reduced motion, print. A still page must be a COMPLETE page.
    ========================================================================== */
 @media (prefers-reduced-motion:reduce){
-  .dv-balance::after,.tp-flow,.tp-pulse,.af-city .ring,.live::before,
+  .dv-balance::after,.tp-flow,.tp-pulse,.af-city .ring,.af-sweep,.live::before,
   .cx-launch .ping,.cx-msg .bubble,.cx-typing i,.pos-tap i,.pos-amount{animation:none!important}
+  .af-sweep{opacity:.4;transform:scale(6)}
   .ek-scan{animation:none;opacity:0}
   .ek-face,.ek-avatar{animation:none;opacity:1;transform:none}
   .ek-ring{animation:none;stroke-dashoffset:0}
