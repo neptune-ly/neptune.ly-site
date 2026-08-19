@@ -297,12 +297,12 @@
     var need = answers.need ? answers.need.v : "";
     var q = new URLSearchParams();
     if (need) q.set("need", need);
-    var parts = [];
-    if (answers.who) parts.push(answers.who.en);
-    if (answers.market) parts.push(answers.market.en);
-    if (answers.when) parts.push(answers.when.en);
-    if (answers.need) parts.push("Interested in: " + answers.need.en);
-    if (parts.length) q.set("msg", parts.join(" · "));
+    // Same value codes as the contact form's audience/market/timeline
+    // selects, on purpose — a chat handoff prefills them directly.
+    if (answers.who) q.set("audience", answers.who.v);
+    if (answers.market) q.set("market", answers.market.v);
+    if (answers.when) q.set("timeline", answers.when.v);
+    if (answers.need) q.set("msg", "Interested in: " + answers.need.en);
     return base + "contact.html?" + q.toString() + "#quote";
   }
 

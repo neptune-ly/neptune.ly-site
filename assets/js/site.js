@@ -153,6 +153,13 @@
     if (need && topicSel && topicSel.querySelector('option[value="' + need + '"]')) {
       topicSel.value = need;
     }
+    ["audience", "market", "timeline"].forEach(function (key) {
+      var val = query.get(key);
+      var sel = form.querySelector('[name="' + key + '"]');
+      if (val && sel && sel.querySelector('option[value="' + val + '"]')) {
+        sel.value = val;
+      }
+    });
     var seed = query.get("msg");
     var msgField = form.querySelector('[name="message"]');
     if (seed && msgField && !msgField.value) msgField.value = seed.slice(0, 1000);

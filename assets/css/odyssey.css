@@ -453,6 +453,13 @@ a.card:hover .card__go svg{transform:translateX(4px)}
 .field textarea{min-block-size:140px;resize:vertical}
 .field .hint{font-size:12.5px;color:var(--md-sys-color-on-surface-variant)}
 .form-grid{display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr))}
+.form-legend{
+  font-size:12px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;
+  color:var(--md-sys-color-on-surface-variant);
+  margin-block:26px 12px;padding-block-start:22px;
+  border-block-start:1.6px solid var(--md-sys-color-outline-variant);
+}
+.form-legend:first-child{margin-block-start:0;padding-block-start:0;border-block-start:none}
 .form-note{font-size:13px;color:var(--md-sys-color-on-surface-variant)}
 .hp-field{position:absolute;inset-inline-start:-9999px;opacity:0;block-size:0;overflow:hidden} /* honeypot */
 .form-status{display:none;padding:14px 18px;border-radius:var(--npt-corner-sm);font-weight:700;font-size:15px}

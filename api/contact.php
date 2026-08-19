@@ -75,6 +75,11 @@ $org   = clean('organization', 160);
 $email = clean('email', 160);
 $phone = clean('phone', 40);
 $topic = clean('topic', 40);
+$audience = clean('audience', 40);
+$market = clean('market', 40);
+$timeline = clean('timeline', 40);
+$customers = clean('customers', 40);
+$coreSystem = clean('current_system', 160);
 $utmSource = clean('utm_source', 160);
 $utmMedium = clean('utm_medium', 160);
 $utmCampaign = clean('utm_campaign', 160);
@@ -88,12 +93,24 @@ if (function_exists('mb_substr')) {
     $msg = substr($msg, 0, 4000);
 }
 
-if ($name === '' || $msg === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+if ($name === '' || $org === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
     fail(422, 'validation');
 }
 $topics = ['mobile','middleware','onboarding','aml','pos','payments','design','other'];
 if (!in_array($topic, $topics, true)) {
     $topic = 'other';
+}
+$audiences = ['bank','mno','fintech','gov','other'];
+if (!in_array($audience, $audiences, true)) {
+    $audience = 'other';
+}
+$markets = ['libya','north-africa','west-africa','east-africa','europe','other-market'];
+if (!in_array($market, $markets, true)) {
+    $market = 'other-market';
+}
+$timelines = ['live','quarter','year','explore'];
+if (!in_array($timeline, $timelines, true)) {
+    $timeline = 'explore';
 }
 
 /* ── compose ── */
@@ -106,6 +123,11 @@ $bodyLines = [
     "Email:         {$email}",
     "Phone:         {$phone}",
     "Topic:         {$topic}",
+    "Audience:      {$audience}",
+    "Market:        {$market}",
+    "Timeline:      {$timeline}",
+    "Customers:     {$customers}",
+    "Core system:   {$coreSystem}",
     "UTM source:    {$utmSource}",
     "UTM medium:    {$utmMedium}",
     "UTM campaign:  {$utmCampaign}",
