@@ -590,13 +590,19 @@
 .loc__dots i.on{background:var(--npt-brand-coral);transform:scale(1.25)}
 
 /* ============================================================================
-   AFRICA — the dot continent
+   AFRICA — vector coastline
    ========================================================================== */
 .af{color:var(--md-sys-color-on-surface)}
-.af svg{display:block;inline-size:100%;max-inline-size:460px;margin-inline:auto;block-size:auto}
-.af-dot{fill:currentColor;opacity:.15}
-[data-mode="dark"] .af-dot{opacity:.22}
-.af-dot--ly{fill:var(--npt-brand-coral);opacity:.95}
+.af svg{display:block;inline-size:100%;max-inline-size:470px;margin-inline:auto;block-size:auto}
+.af-land{
+  fill:color-mix(in oklab,var(--md-sys-color-on-surface) 8%,transparent);
+  stroke:color-mix(in oklab,var(--md-sys-color-on-surface) 26%,transparent);
+  stroke-width:1.4;stroke-linejoin:round;
+}
+[data-mode="dark"] .af-land{
+  fill:color-mix(in oklab,var(--md-sys-color-primary) 15%,transparent);
+  stroke:color-mix(in oklab,var(--md-sys-color-primary) 46%,transparent);
+}
 .af-city circle{fill:var(--npt-brand-coral)}
 .af-city--2 circle{fill:var(--npt-brand-sky)}
 .af-city .ring{fill:none;stroke:var(--npt-brand-coral);stroke-width:1.6;
@@ -607,15 +613,17 @@
    reduced-motion freezes it to a single still ring rather than removing the
    brand mark entirely. */
 .af-sweep{
-  fill:none;stroke:var(--npt-brand-sky);stroke-width:1.1;opacity:0;
+  fill:none;stroke:var(--npt-brand-sky);stroke-width:2.2;opacity:0;
   transform-origin:center;transform-box:fill-box;
   animation:af-sweep 7.8s var(--npt-ease-standard) infinite;
 }
 @keyframes af-sweep{
-  0%{transform:scale(1);opacity:.55}
-  85%,100%{transform:scale(24);opacity:0}
+  0%{transform:scale(1);opacity:.3}
+  85%,100%{transform:scale(30);opacity:0}
 }
-.af-city text{font-family:var(--npt-font-text),sans-serif;font-size:13px;font-weight:700;
+/* Sized in viewBox units, not px — the SVG scales to its container, so a px
+   value would shrink with it and the labels rendered at ~7px. */
+.af-lbl{font-family:var(--npt-font-text),sans-serif;font-size:22px;font-weight:700;
   fill:var(--md-sys-color-on-surface)}
 
 /* ============================================================================
@@ -850,4 +858,28 @@ body.cx-open .cx-launch{opacity:0;pointer-events:none;transform:scale(.9)}
 @media print{
   .cx-launch,.cx,.loc__dots{display:none!important}
   body{background:#fff;color:#000}
+}
+
+/* ---------------------------------------------------------------- partner --
+   Sits between the footer columns and the copyright line: present, credited,
+   and deliberately quieter than the Neptune lockup above it. */
+.partner{
+  display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+  padding-block:22px 20px;margin-block-start:8px;
+  border-block-start:1px solid color-mix(in oklab,#fff 12%,transparent);
+}
+.partner__label{
+  font-size:11.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;
+  color:color-mix(in oklab,#fff 52%,transparent);
+}
+[dir="rtl"] .partner__label{letter-spacing:0}
+.partner__mark{
+  display:inline-flex;align-items:center;
+  opacity:.82;transition:opacity var(--npt-dur-fast) var(--npt-ease-standard);
+}
+.partner__mark:hover{opacity:1}
+.partner__mark img{display:block;block-size:26px;inline-size:auto}
+.partner__wordmark{
+  font-family:var(--npt-font-display),sans-serif;
+  font-size:18px;font-weight:800;letter-spacing:-.01em;color:#fff;
 }

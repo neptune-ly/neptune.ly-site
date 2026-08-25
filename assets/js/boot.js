@@ -23,6 +23,14 @@
   if (LANGS.indexOf(lang) === -1) lang = "en";
   d.setAttribute("lang", lang);
   d.setAttribute("dir", lang === "ar" ? "rtl" : "ltr");
+  // Apply the theme before first paint. Without this the hardcoded
+  // data-mode="light" on <html> always wins: the toggle works for one page
+  // view, then every reload silently reverts, and the OS preference is
+  // never honoured at all.
+  if (!mode) {
+    mode = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  }
+  d.setAttribute("data-mode", mode);
   var t = lang === "ar" ? d.getAttribute("data-title-ar") : d.getAttribute("data-title-en");
   if (t) document.title = t;
 })();
